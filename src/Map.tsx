@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import { FilterButton } from "./components/Buttons";
@@ -69,7 +68,7 @@ const MapComponent: React.FC<MapProps> = ({information, status}) => {
       if (information && information.data && information.data.stations) {
         information.data.stations.map((station: any) => {
           console.log('z', station)
-          const marker=new mapboxgl.Marker()
+          new mapboxgl.Marker()
             .setLngLat([station.lon, station.lat])
             .addTo(map);
         })
@@ -93,7 +92,7 @@ const MapComponent: React.FC<MapProps> = ({information, status}) => {
       // Clean up on unmount
       return () => map.remove();
     }
-  }, [information, status]);
+  }, [information, informationData, status]);
 
   return (
     <>
