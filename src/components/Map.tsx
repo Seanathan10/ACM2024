@@ -274,17 +274,14 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
   const filterButtons: FilterButtonData[] = [
     {
       label: "On Campus",
-      shouldFilter: false,
       filterFunction: (stations) => stations.filter(station => station['data']['stations']['num_docks_available'] = 1),
     },
     {
       label: "Off Campus",
-      shouldFilter: false,
       filterFunction: (stations) => stations.filter(station => !station.onCampus),
     },
     {
       label: "Available Bikes",
-      shouldFilter: false,
       filterFunction: (stations) => stations.filter(station => station['data']['stations']['num_docks_available'] > 0),
     },
   ];
