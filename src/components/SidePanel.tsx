@@ -1,54 +1,51 @@
-import Drawer from '@mui/material/Drawer';
-import { Button, Container, Typography } from '@mui/material';
-import {useState} from 'react';
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle, TransitionChild } from '@headlessui/react'
+import { useState } from 'react';
+import { Dialog, DialogBackdrop, DialogPanel, DialogTitle, TransitionChild } from '@headlessui/react';
+// import { XMarkIcon } from '@heroicons/react/24/outline'
+import './SidePanel.css';
 
 interface SidePanelProps {
-    stationID: string;
+  stationID: string;
 }
 
-//import { XMarkIcon } from '@heroicons/react/24/outline'
-
-export const SidePanel = ({stationID} : SidePanelProps) => {
-  const [open, setOpen] = useState(true)
+export const SidePanel = ({ stationID }: SidePanelProps) => {
+  const [open, setOpen] = useState(true);
 
   return (
-    <Dialog open={open} onClose={setOpen} className="position: relative; z+999999999999999999999999999999999999999999999999999">
+    <Dialog open={open} onClose={() => setOpen(false)} className="side-panel-dialog">
       <DialogBackdrop
         transition
-        className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0"
+        className="side-panel-backdrop"
       />
 
-      <div className="fixed inset-0 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+      <div className="side-panel-fixed-container">
+        <div className="side-panel-absolute-container">
+          <div className="side-panel-inner-container">
             <DialogPanel
               transition
-              className="pointer-events-auto relative w-screen max-w-md transform transition duration-500 ease-in-out data-[closed]:translate-x-full sm:duration-700"
+              className="side-panel-dialog-panel"
             >
               <TransitionChild>
-                <div className="absolute left-0 top-0 -ml-8 flex pr-2 pt-4 duration-500 ease-in-out data-[closed]:opacity-0 sm:-ml-10 sm:pr-4">
+                <div className="side-panel-close-button-container">
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
-                    className="relative rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                    className="side-panel-close-button"
                   >
-                    <span className="absolute -inset-2.5" />
+                    <span className="side-panel-invisible-span" />
                     <span className="sr-only">Close panel</span>
-                    
                   </button>
                 </div>
               </TransitionChild>
-              <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
-                <div className="px-4 sm:px-6">
-                  <DialogTitle className="text-base font-semibold leading-6 text-gray-900">Panel title</DialogTitle>
+              <div className="side-panel-content">
+                <div className="side-panel-title">
+                  <DialogTitle>Panel title</DialogTitle>
                 </div>
-                <div className="relative mt-6 flex-1 px-4 sm:px-6">{/* Your content */}</div>
+                <div className="side-panel-body">{/* Your content here */}</div>
               </div>
             </DialogPanel>
           </div>
         </div>
       </div>
     </Dialog>
-  )
-}
+  );
+};

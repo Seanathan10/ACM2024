@@ -1,0 +1,96 @@
+.side-panel-dialog {
+    position: relative;
+  }
+  
+  .side-panel-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(75, 85, 99, 0.75);
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .side-panel-fixed-container {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+  }
+  
+  .side-panel-absolute-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  
+  .side-panel-inner-container {
+    pointer-events: none;
+    position: fixed;
+    inset-y: 0;
+    left: 0; /* Position panel on the left */
+    display: flex;
+    max-width: 100%;
+    padding-right: 10px;
+  }
+  
+  .side-panel-dialog-panel {
+    pointer-events: auto;
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    transform: translateX(0);
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .side-panel-close-button-container {
+    position: absolute;
+    right: 0; /* Close button on the right side of the panel */
+    top: 0;
+    margin-right: -32px;
+    display: flex;
+    padding-left: 8px;
+    padding-top: 16px;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .side-panel-close-button {
+    position: relative;
+    color: #d1d5db;
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+    transition: color 0.3s ease;
+  }
+  
+  .side-panel-close-button:hover {
+    color: white;
+  }
+  
+  .side-panel-invisible-span {
+    position: absolute;
+    inset: -10px;
+  }
+  
+  .side-panel-content {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    background-color: white;
+    padding: 24px 0;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+    height: 100%;
+  }
+  
+  .side-panel-title {
+    padding-left: 16px;
+    padding-right: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+  }
+  
+  .side-panel-body {
+    margin-top: 24px;
+    flex: 1;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  
