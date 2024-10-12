@@ -1,5 +1,5 @@
 import MapComponent from "./Map";
-import { Chart, HistoricalChart } from "./components/Chart";
+import { HistoricalChart } from "./components/Chart";
 
 
 import { useEffect, useState } from "react";
@@ -13,7 +13,6 @@ export default function App() {
     async function fetchData() {
       const status = await getBcycleStatusJSON();
       const information = await getBcycleInformationJSON();
-      console.log('a', information)
       setStatusData(status);
       setInformationData(information);
     }
