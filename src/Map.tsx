@@ -12,6 +12,18 @@ import "mapbox-gl/dist/mapbox-gl.css";
 //   coordinates: number[];
 // }
 
+const markers = {};
+
+for (let i = 0; i <= 30; i++) {
+  try {
+    const module = await import(`./assets/markers/marker-${i}.svg`);
+    markers[`marker_${i}`] = module.default;
+  } catch (error) {
+    console.error(`Failed to load marker-${i}.svg:`, error);
+  }
+}
+
+
 interface MapProps {
   information: {
     data: {
@@ -192,17 +204,33 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
             address: string;
             lon: number;
             lat: number;
-          }) => {
+          }, index: number) => {
             const popup = new mapboxgl.Popup({
               offset: 25,
               className: "main-popup",
               closeButton: false,
             }).setHTML(`<h3>${station.name}</h3><p>${station.address}</p>`);
 
-            const marker = new mapboxgl.Marker().setLngLat([
+          let marker;
+
+          if (status && status.data && status.data.stations && status.data.stations[index] && status.data.stations[index].is_renting) {
+            const imgElement = document.createElement('img');
+
+            imgElement.src = markers[`marker_${Math.min(status.data.stations[index].num_bikes_available, 30)}`];
+
+            marker = new mapboxgl.Marker({element: imgElement}).setLngLat([
               station.lon,
               station.lat,
             ]);
+          } else {
+            marker = new mapboxgl.Marker({color: "#808080"}).setLngLat([
+              station.lon,
+              station.lat,
+            ]);
+          }
+
+            marker.setPopup(popup);
+            marker.addTo(map);
 
             marker.getElement().addEventListener("mouseenter", () => {
               popup.addTo(map);
@@ -210,9 +238,6 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
             marker.getElement().addEventListener("mouseleave", () => {
               popup.remove();
             });
-
-            marker.setPopup(popup);
-            marker.addTo(map);
 
             marker.getElement().addEventListener("click", () => {
               alert(
