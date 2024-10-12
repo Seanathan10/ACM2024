@@ -43,15 +43,16 @@ interface MapProps {
     isLoading: boolean;
     error: string | null;
   };
-  sideBarOpen: boolean;
-  setSideBarOpen: (open: boolean) => void;
+//   openSideBar: boolean;
+//   closeSideBar: (open: boolean) => void;
 }
 
 const MapComponent: React.FC<MapProps> = ({
   information,
   status,
-  sideBarOpen,
-  setSideBarOpen,
+  openSideBar,
+  closeSideBar,
+  getDrawerState
 }) => {
   console.log(information);
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -290,6 +291,9 @@ const MapComponent: React.FC<MapProps> = ({
                   "Address: " +
                   station.address
               );
+
+			  openSideBar();
+			  console.log("SideBarOpen: ", getDrawerState());
 
               // return (
               //   <SidePanel station

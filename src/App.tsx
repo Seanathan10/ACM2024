@@ -7,6 +7,18 @@ import { SidePanel } from "./components/SidePanel";
 export default function App() {
   const [sideBarOpen, setSideBarOpen] = useState(false);
 
+  const handleDrawerOpen = () => {
+    setSideBarOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setSideBarOpen(false);
+  };
+
+  const getDrawerState = () => {
+    return sideBarOpen;
+  };
+
   const [statusData, setStatusData] = useState({
     isLoading: true,
     error: null,
@@ -40,8 +52,17 @@ export default function App() {
       <MapComponent
         information={informationData}
         status={statusData}
+        openSideBar={handleDrawerOpen}
+        closeSideBar={handleDrawerClose}
+        getDrawerState={getDrawerState}
       ></MapComponent>
-      <SidePanel stationID="bcycle_santacruz_7437" />
+      
+      <SidePanel
+        isOpen={getDrawerState}
+        openSideBar={handleDrawerOpen}
+        closeSideBar={handleDrawerClose}
+        stationID="bcycle_santacruz_7437"
+      />
     </>
   );
 }

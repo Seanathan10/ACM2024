@@ -36,13 +36,16 @@ export const SidePanel = ({
   stationIndex,
   status,
   information,
+  isOpen,
+  openSideBar,
+  closeSideBar,
 }: SidePanelProps) => {
-  const [open, setOpen] = useState(true);
+  // const [open, setOpen] = useState(true);
 
   const Main = styled("main", {
     shouldForwardProp: (prop) => prop !== "open",
   })<{
-    open?: boolean;
+    isOpen?: boolean;
   }>(({ theme }) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -53,7 +56,7 @@ export const SidePanel = ({
     marginLeft: `-${drawerWidth}px`,
     variants: [
       {
-        props: ({ open }) => open,
+        props: ({ isOpen }) => isOpen,
         style: {
           transition: theme.transitions.create("margin", {
             easing: theme.transitions.easing.easeOut,
@@ -76,14 +79,6 @@ export const SidePanel = ({
 
   const theme = useTheme();
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -98,7 +93,7 @@ export const SidePanel = ({
         }}
         variant="persistent"
         anchor="left"
-        open={open}
+        open={isOpen}
       >
         <DrawerHeader>
           <Box sx={{ padding: 2 }}>
@@ -109,7 +104,7 @@ export const SidePanel = ({
               }`}
             </Typography>
           </Box>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton onClick={closeSideBar()}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
             ) : (
@@ -160,7 +155,7 @@ export const SidePanel = ({
           heightPercent={80}
         />
       </Drawer>
-      <Main open={open}>
+      <Main open={isOpen()}>
         <DrawerHeader />
       </Main>
     </Box>
