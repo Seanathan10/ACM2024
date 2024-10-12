@@ -6,14 +6,12 @@ interface HistoricalChartData {
 
 interface HistoricalChartProps {
     stationID: string;
-    data: HistoricalChartData;
+    widthPercent?: number;
+    heightPercent?: number;
 }
 
 
-
-
-
-export const HistoricalChart = ({stationID}: HistoricalChartProps) => {
+export const HistoricalChart = ({stationID, widthPercent = 100, heightPercent = 100}: HistoricalChartProps) => {
     const stationData = hourlyAverage[stationID];
     const graphData = [];
     for (let i = 0; i < 24; i++) {
@@ -32,7 +30,7 @@ export const HistoricalChart = ({stationID}: HistoricalChartProps) => {
 
     }
 
-    return (<AreaChart width={730} height={250} data={graphData}
+    return (<AreaChart width={730 * (widthPercent / 100)} height={250 * (heightPercent / 100)} data={graphData}
         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
         <defs>
           <linearGradient id="docksAvailable" x1="0" y1="0" x2="0" y2="1">
@@ -44,8 +42,8 @@ export const HistoricalChart = ({stationID}: HistoricalChartProps) => {
             <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>
           </linearGradient>
         </defs>
-        <XAxis dataKey="name" />
-        <YAxis />
+        <XAxis dataKey="name" angle={-45} textAnchor='end' height={70}/>
+        <YAxis scale={"linear"}/>
         <CartesianGrid strokeDasharray="3 3" />
         <Tooltip />
         <Area type="monotone" dataKey="docksAvailable" stroke="#8884d8" fillOpacity={1} fill="url(#docksAvailable)" />

@@ -36,7 +36,7 @@ export default function App() {
     <>
       Hello
       <MapComponent information = {informationData} status={statusData}></MapComponent>
-      <SidePanel stationID="bcycle_santacruz_7437"/>
+      {/* <SidePanel stationID="bcycle_santacruz_7437"/> */}
     </>
   );
 }
