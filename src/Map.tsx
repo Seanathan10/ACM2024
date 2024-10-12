@@ -154,11 +154,11 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
       }
 
       map.on("load", function () {
-        const pitchContorl = new CustomPitchControl();
-        map.addControl(pitchContorl, "top-right");
+        const pitchControl = new CustomPitchControl();
+        map.addControl(pitchControl, "top-right");
 
         map.on("pitch", function () {
-          pitchContorl.update();
+          pitchControl.update();
         });
       });
 
