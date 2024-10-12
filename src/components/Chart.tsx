@@ -1,4 +1,4 @@
-import { XAxis, YAxis, CartesianGrid, Tooltip, AreaChart, Area} from 'recharts';
+import { XAxis, YAxis, CartesianGrid, Tooltip, AreaChart, Area } from 'recharts';
 
 interface HistoricalChartData {
     [key: string]: { [hour: string]: number }[];
@@ -10,47 +10,57 @@ interface HistoricalChartProps {
     heightPercent?: number;
 }
 
-
-export const HistoricalChart = ({stationID, widthPercent = 100, heightPercent = 100}: HistoricalChartProps) => {
+export const HistoricalChart = ({ stationID, widthPercent = 100, heightPercent = 100 }: HistoricalChartProps) => {
     const stationData = hourlyAverage[stationID];
+
+    // Check if stationData is available
+    if (!stationData) {
+        return <div>No historical data available for station {stationID}</div>;
+    }
+
     const graphData = [];
     for (let i = 0; i < 24; i++) {
         let time = "12:00AM";
-        if (i > 0 && i <= 12) 
+        if (i > 0 && i <= 12) {
             time = `${i}:00AM`;
-        else if (i > 12) 
+        } else if (i > 12) {
             time = `${i - 12}:00PM`;
-        
+        }
+
         graphData.push({
             name: time,
             docksAvailable: stationData[0][i],
             bikesAvailable: stationData[1][i],
-            amt: 100
-        })
-
+            amt: 100,
+        });
     }
 
-    return (<AreaChart width={730 * (widthPercent / 100)} height={250 * (heightPercent / 100)} data={graphData}
-        margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-        <defs>
-          <linearGradient id="docksAvailable" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-            <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
-          </linearGradient>
-          <linearGradient id="bikesAvailable" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
-            <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>
-          </linearGradient>
-        </defs>
-        <XAxis dataKey="name" angle={-45} textAnchor='end' height={70}/>
-        <YAxis scale={"linear"}/>
-        <CartesianGrid strokeDasharray="3 3" />
-        <Tooltip />
-        <Area type="monotone" dataKey="docksAvailable" stroke="#8884d8" fillOpacity={1} fill="url(#docksAvailable)" />
-        <Area type="monotone" dataKey="bikesAvailable" stroke="#82ca9d" fillOpacity={1} fill="url(#bikesAvailable)" />
-      </AreaChart>)
-}
-
+    return (
+        <AreaChart
+            width={730 * (widthPercent / 100)}
+            height={250 * (heightPercent / 100)}
+            data={graphData}
+            margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+        >
+            <defs>
+                <linearGradient id="docksAvailable" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="bikesAvailable" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                </linearGradient>
+            </defs>
+            <XAxis dataKey="name" angle={-45} textAnchor="end" height={70} />
+            <YAxis scale="linear" />
+            <CartesianGrid strokeDasharray="3 3" />
+            <Tooltip />
+            <Area type="monotone" dataKey="docksAvailable" stroke="#8884d8" fillOpacity={1} fill="url(#docksAvailable)" />
+            <Area type="monotone" dataKey="bikesAvailable" stroke="#82ca9d" fillOpacity={1} fill="url(#bikesAvailable)" />
+        </AreaChart>
+    );
+};
 
 
 // because poopooscript cannot find the json in /public

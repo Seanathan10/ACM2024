@@ -51,28 +51,8 @@ const MapComponent: React.FC<MapProps> = ({
   information,
   status,
   openSideBar,
-  closeSideBar,
-  getDrawerState
 }) => {
-  console.log(information);
   const mapContainer = useRef<HTMLDivElement>(null);
-  // const [stations, setStations] = React.useState([]);
-  //   const movingObjects: MovingObject[] = [
-  //     // Define your moving objects here
-  //   ];
-
-  useEffect(() => {
-    console.log("Updated statusData:", JSON.stringify(status, null, 2));
-  }, [status]);
-
-  useEffect(() => {
-    console.log(
-      "Updated informationData:",
-      JSON.stringify(information, null, 2)
-    );
-  }, [information]);
-
-  const informationData = JSON.stringify(information, null, 2);
 
   useEffect(() => {
     mapboxgl.accessToken =
@@ -291,9 +271,11 @@ const MapComponent: React.FC<MapProps> = ({
                   "Address: " +
                   station.address
               );
+              openSideBar(station); // Pass the station object to openSideBar
+              // console.log("SideBarOpen: ", getDrawerState());
 
-			  openSideBar();
-			  console.log("SideBarOpen: ", getDrawerState());
+
+			  // openSideBar();
 
               // return (
               //   <SidePanel station
@@ -305,7 +287,13 @@ const MapComponent: React.FC<MapProps> = ({
 
       return () => map.remove();
     }
-  }, [information, informationData, status]);
+  }, [information, status, openSideBar]);
+
+
+
+
+
+
 
   const filterButtons: FilterButtonData[] = [
     {

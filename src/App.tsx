@@ -1,22 +1,20 @@
 import MapComponent from "./components/Map";
-
 import { useEffect, useState } from "react";
 import { getBcycleInformationJSON, getBcycleStatusJSON } from "./api/BCycle";
 import { SidePanel } from "./components/SidePanel";
 
 export default function App() {
   const [sideBarOpen, setSideBarOpen] = useState(false);
+  const [selectedStation, setSelectedStation] = useState(null);
 
-  const handleDrawerOpen = () => {
+  const handleDrawerOpen = (station) => {
+    setSelectedStation(station); // Set the selected station
     setSideBarOpen(true);
   };
 
   const handleDrawerClose = () => {
     setSideBarOpen(false);
-  };
-
-  const getDrawerState = () => {
-    return sideBarOpen;
+    setSelectedStation(null); // Clear the selected station when closing
   };
 
   const [statusData, setStatusData] = useState({
@@ -44,24 +42,19 @@ export default function App() {
     return () => clearInterval(intervalId);
   }, []);
 
-  // Use another useEffect to log state changes
-
   return (
     <>
-      Hello
       <MapComponent
         information={informationData}
         status={statusData}
         openSideBar={handleDrawerOpen}
-        closeSideBar={handleDrawerClose}
-        getDrawerState={getDrawerState}
-      ></MapComponent>
-      
+      />
+
       <SidePanel
-        isOpen={getDrawerState}
+        isOpen={sideBarOpen}
         openSideBar={handleDrawerOpen}
         closeSideBar={handleDrawerClose}
-        stationID="bcycle_santacruz_7437"
+        station={selectedStation} // Pass the selected station to the SidePanel
       />
     </>
   );

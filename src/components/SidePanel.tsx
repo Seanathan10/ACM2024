@@ -1,7 +1,3 @@
-import { useState } from "react";
-// import { XMarkIcon } from '@heroicons/react/24/outline'
-import "./SidePanel.css";
-
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -17,36 +13,31 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 
-import { HistoricalChart } from "./Chart";
+import { HistoricalChart } from "./Chart"; // Make sure the path is correct
 
-import BikeIcon from "../assets/sidepanel/bike.svg";
-import DockIcon from "../assets/sidepanel/dock.svg";
+import BikeIcon from "../assets/sidepanel/bike.svg"; // Adjust the path accordingly
+import DockIcon from "../assets/sidepanel/dock.svg"; // Adjust the path accordingly
 
 interface SidePanelProps {
-  stationID: string;
-  stationIndex: string;
-  status: any;
-  information: any;
+  isOpen: boolean;
+  station: any;
+  closeSideBar: () => void;
 }
 
 const drawerWidth = 440;
 
-export const SidePanel = ({
-  stationID,
-  stationIndex,
-  status,
-  information,
+export const SidePanel: React.FC<SidePanelProps> = ({
   isOpen,
-  openSideBar,
+  station,
   closeSideBar,
-}: SidePanelProps) => {
-  // const [open, setOpen] = useState(true);
+}) => {
+  const theme = useTheme();
 
   const Main = styled("main", {
     shouldForwardProp: (prop) => prop !== "open",
   })<{
-    isOpen?: boolean;
-  }>(({ theme }) => ({
+    open?: boolean;
+  }>(({ theme, open }) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
     transition: theme.transitions.create("margin", {
@@ -54,30 +45,22 @@ export const SidePanel = ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: `-${drawerWidth}px`,
-    variants: [
-      {
-        props: ({ isOpen }) => isOpen,
-        style: {
-          transition: theme.transitions.create("margin", {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-          }),
-          marginLeft: 0,
-        },
-      },
-    ],
+    ...(open && {
+      transition: theme.transitions.create("margin", {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
+    }),
   }));
 
   const DrawerHeader = styled("div")(({ theme }) => ({
     display: "flex",
     alignItems: "center",
     padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
     ...theme.mixins.toolbar,
     justifyContent: "flex-end",
   }));
-
-  const theme = useTheme();
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -98,18 +81,11 @@ export const SidePanel = ({
         <DrawerHeader>
           <Box sx={{ padding: 2 }}>
             <Typography variant="h6" component="div">
-              {`Station Details: ${
-                information?.data?.stations?.[stationIndex]?.address ??
-                "Default Address"
-              }`}
+              {`Station Details: ${station?.address ?? "No Station Selected"}`}
             </Typography>
           </Box>
-          <IconButton onClick={closeSideBar()}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
+          <IconButton onClick={closeSideBar}>
+            {theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
@@ -149,13 +125,16 @@ export const SidePanel = ({
           ))}
         </List>
         <Divider />
-        <HistoricalChart
-          stationID={stationID}
-          widthPercent={60}
-          heightPercent={80}
-        />
+        {/* Pass stationID only if station exists */}
+        {station && (
+          <HistoricalChart
+            stationID={station.stationID}
+            widthPercent={60}
+            heightPercent={80}
+          />
+        )}
       </Drawer>
-      <Main open={isOpen()}>
+      <Main open={isOpen}>
         <DrawerHeader />
       </Main>
     </Box>
