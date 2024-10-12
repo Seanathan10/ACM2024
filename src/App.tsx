@@ -40,7 +40,7 @@ export default function App() {
       console.log('a', informationData);
     }
     fetchData();
-  }, []);
+  }, [informationData, statusData]);
   return (
     <>
       Hello
