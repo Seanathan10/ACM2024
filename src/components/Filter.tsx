@@ -8,14 +8,14 @@ export const Filter = ({ label }: FilterButtonProps) => {
     return (
         <div style={{
             position: 'fixed',
-            top: '5%',
-            right: '5%',
+            top: '12.5%',
+            right: '1%',
             display: 'flex',
             flexDirection: 'column',
             // justifyItems: 'center',
             // justifyContent: 'center',
             backgroundColor: 'gray',
-            width: '15vw',
+            width: '12.5vw',
             padding: 0,
             borderRadius: '10px',
             alignItems: 'center',
@@ -23,13 +23,13 @@ export const Filter = ({ label }: FilterButtonProps) => {
             // opacity: 0.8,
             // fontWeight: 'bold'
         }}>
-            {/* <label style={{
+            <label style={{
                 backgroundColor: 'gray',
                 padding: '5px',
                 borderRadius: '25px',
                 color: 'black',
                 fontWeight: 'bold'
-            }}>Filter Stations</label> */}
+            }}>Filter Stations</label>
             <FilterButton label="On Campus" onClick={() => {}}></FilterButton>
             <FilterButton label="Off Campus" onClick={() => {}}></FilterButton>
             <FilterButton label="Available Bikes" onClick={() => {}}></FilterButton>
