@@ -5,16 +5,18 @@ import { getBcycleInformationJSON, getBcycleStatusJSON } from "./api/BCycle";
 import { SidePanel } from "./components/SidePanel";
 
 export default function App() {
+  const [sideBarOpen, setSideBarOpen] = useState(false);
+
   const [statusData, setStatusData] = useState({
     isLoading: true,
-    error: null
+    error: null,
   });
   const [informationData, setInformationData] = useState({
     data: {
-      stations: []
-    }
+      stations: [],
+    },
   });
-  
+
   useEffect(() => {
     async function fetchData() {
       const status = await getBcycleStatusJSON();
@@ -31,12 +33,15 @@ export default function App() {
   }, []);
 
   // Use another useEffect to log state changes
-  
+
   return (
     <>
       Hello
-      <MapComponent information = {informationData} status={statusData}></MapComponent>
-      {/* <SidePanel stationID="bcycle_santacruz_7437"/> */}
+      <MapComponent
+        information={informationData}
+        status={statusData}
+      ></MapComponent>
+      <SidePanel stationID="bcycle_santacruz_7437" />
     </>
   );
 }
