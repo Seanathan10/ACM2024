@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import { Filter } from "./components/Filter";
 
+import "./App.css";
+
 import "mapbox-gl/dist/mapbox-gl.css";
 
 // interface MovingObject {
@@ -41,7 +43,7 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
       "pk.eyJ1Ijoic2VhbmF0aGFuMTAiLCJhIjoiY2x1ZXBndzRzMXZ1ajJrcDY1Y2h5N3ZlNyJ9.yEdc6z0JDvIigDJyc2zfZg";
 
     const bounds = [
-      [-122.100, 36.948], // Southwest coordinates
+      [-122.1, 36.948], // Southwest coordinates
       [-121.949, 37.005], // Northeast coordinates
     ];
 
@@ -175,9 +177,26 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
         information.data.stations.map((station: any) => {
           console.log("z", station);
 
-          const marker = new mapboxgl.Marker()
-            .setLngLat([station.lon, station.lat])
-            .addTo(map);
+          const popup = new mapboxgl.Popup({
+            offset: 25,
+            className: "main-popup",
+            closeButton: false,
+          }).setHTML(`<h3>${station.name}</h3><p>${station.address}</p>`);
+
+          const marker = new mapboxgl.Marker().setLngLat([
+            station.lon,
+            station.lat,
+          ]);
+
+          marker.getElement().addEventListener("mouseenter", () => {
+            popup.addTo(map);
+          });
+          marker.getElement().addEventListener("mouseleave", () => {
+            popup.remove();
+          });
+
+          marker.setPopup(popup);
+          marker.addTo(map);
 
           marker.getElement().addEventListener("click", () => {
             alert(
