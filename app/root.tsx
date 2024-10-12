@@ -1,23 +1,13 @@
 import {
-    Links,
-    Meta,
-    Outlet,
-    Scripts,
-    ScrollRestoration,
-    useSearchParams,
-	Links,
-	Meta,
 	Outlet,
 	Scripts,
-	ScrollRestoration,
 } from "@remix-run/react";
+
 import type { LinksFunction } from "@remix-run/node";
 import React from "react"
 import { Map, Marker } from "pigeon-maps";
 
 import "./tailwind.css";
-import { useEffect, useState } from "react";
-import { getBcycleInformationJSON, getBcycleStatusJSON } from "api/BCycle";
 
 export const links: LinksFunction = () => [
 	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
