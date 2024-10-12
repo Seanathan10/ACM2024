@@ -22,6 +22,11 @@ export default function App() {
       setInformationData(information);
     }
     fetchData();
+    // Set up persistent updates every minute
+    const intervalId = setInterval(fetchData, 60000);
+
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   // Use another useEffect to log state changes
