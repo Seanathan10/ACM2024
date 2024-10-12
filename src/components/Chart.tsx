@@ -1,6 +1,10 @@
 import { XAxis, YAxis, CartesianGrid, Tooltip, AreaChart, Area} from 'recharts';
 
-export const HistoricalChart = ({stationID}) => {
+interface HistoricalChartProps {
+    stationID: string;
+}
+
+export const HistoricalChart = ({stationID} : HistoricalChartProps) => {
     
     const stationData = hourlyAverage[stationID];
     let graphData = [];
