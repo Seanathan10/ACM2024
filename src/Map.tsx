@@ -21,8 +21,8 @@ const MapComponent: React.FC = () => {
       const map = new mapboxgl.Map({
         container: mapContainer.current,
         style: "mapbox://styles/mapbox/standard",
-        center: [-74.0060152, 40.7127281],
-        zoom: 5,
+        center: [-122.0584, 36.9905],
+        zoom: 14,
         maxZoom: 18,
       });
 
