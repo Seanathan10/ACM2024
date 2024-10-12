@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import { FilterButton } from "./components/Buttons";
 
+import 'mapbox-gl/dist/mapbox-gl.css';
+
 // interface MovingObject {
 //   id: number;
 //   name: string;
@@ -22,8 +24,8 @@ const MapComponent: React.FC = () => {
       const map = new mapboxgl.Map({
         container: mapContainer.current,
         style: "mapbox://styles/mapbox/standard",
-        center: [-74.0060152, 40.7127281],
-        zoom: 5,
+        center: [-122.0584, 36.9905],
+        zoom: 14,
         maxZoom: 18,
       });
 
@@ -31,6 +33,20 @@ const MapComponent: React.FC = () => {
       map.addControl(new mapboxgl.NavigationControl(), "top-left");
 
       // Add your custom markers and lines here
+      
+    
+    // TOPOGRAPHICAL MAP
+    //   map.on('load', () => {
+    //     map.addLayer({
+    //       id: 'terrain-data',
+    //       type: 'line',
+    //       source: {
+    //         type: 'vector',
+    //         url: 'mapbox://mapbox.mapbox-terrain-v2'
+    //       },
+    //       'source-layer': 'contour'
+    //     });
+    //   });
 
       // Clean up on unmount
       return () => map.remove();
