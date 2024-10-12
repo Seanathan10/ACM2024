@@ -9,7 +9,7 @@ export const FilterButton = ({label, onClick}: FilterButtonProps) => {    // Rou
     // filter bcycle stops by on/off campus, stations with available bikes, 
     return (
         <div style={{ width: '90%', minWidth: 185, margin: '7.5px 0px 7.5px 0px', fontSize: 18 }}>
-            <button onClick={onClick} style={{  borderRadius: 50, padding: 17.5, width: '100%', backgroundColor: 'black' }}>{label}</button>
+            <button onClick={onClick} style={{  borderRadius: 50, padding: 17.5, width: '100%', backgroundColor: 'black', color: "white"}}>{label}</button>
         </div>
     )
 } 
