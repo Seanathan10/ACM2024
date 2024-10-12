@@ -1,9 +1,21 @@
 import { XAxis, YAxis, CartesianGrid, Tooltip, AreaChart, Area} from 'recharts';
 
-export const HistoricalChart = ({stationID}) => {
-    
+interface HistoricalChartData {
+    [key: string]: { [hour: string]: number }[];
+}
+
+interface HistoricalChartProps {
+    stationID: string;
+    data: HistoricalChartData;
+}
+
+
+
+
+
+export const HistoricalChart = ({stationID}: HistoricalChartProps) => {
     const stationData = hourlyAverage[stationID];
-    let graphData = [];
+    const graphData = [];
     for (let i = 0; i < 24; i++) {
         let time = "12:00AM";
         if (i > 0 && i <= 12) 
@@ -43,8 +55,8 @@ export const HistoricalChart = ({stationID}) => {
 
 
 
-//because poopooscript cannot find the json in /public
-const hourlyAverage = {
+// because poopooscript cannot find the json in /public
+const hourlyAverage: HistoricalChartData = {
     "bcycle_santacruz_7429": [
         {
             "23": 3,
