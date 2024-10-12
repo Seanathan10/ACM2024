@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
-import { FilterButton } from "./components/Buttons";
+import { Filter } from "./components/Filter";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -69,7 +69,7 @@ const MapComponent: React.FC = () => {
         ref={mapContainer}
         style={{ position: "absolute", top: 0, bottom: 0, width: "100%" }}
       />
-      <FilterButton label={'abc'} onClick={() => {}}/>
+      <Filter label="asdsad"></Filter>
     </>
   );
 };

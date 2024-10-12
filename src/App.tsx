@@ -37,18 +37,20 @@ export default function App() {
     async function fetchData() {
       const status = await getBcycleStatusJSON();
       const information = await getBcycleInformationJSON();
+      console.log(status, information);
       setStatusData(status);
-      setInformationData(information);
+      setInformationData(information['data']);
 
-      console.log(statusData);
-      console.log('a', informationData);
+
     }
     fetchData();
   }, []);
   return (
     <>
-      Hello
-      {/* <Outlet />; */}
+      <div style={{backgroundColor: 'red', display: 'flex', width: 500, height: 50, justifyContent: 'center'}}>
+        <div style={{width: 50, height: 50, backgroundColor: 'green', justifySelf: 'center'}}/>
+        {/* <button style={{cent }}>ahwnisds</button> */}
+      </div>
       <MapComponent></MapComponent>
     </>
   );

@@ -3,10 +3,10 @@ const BCYCLE_STATUS_ENDPOINT = 'https://gbfs.bcycle.com/bcycle_santacruz/station
 
 export async function getBcycleStatusJSON(): Promise<object> {
     const data = await fetch(BCYCLE_STATUS_ENDPOINT)
-    return JSON.parse(await data.text())
+    return data.json()
 }
 
 export async function getBcycleInformationJSON(): Promise<object> {
     const data = await fetch(BCYCLE_INFORMATION_ENDPOINT)
-    return JSON.parse(await data.text())
+    return await data.json()
 }
