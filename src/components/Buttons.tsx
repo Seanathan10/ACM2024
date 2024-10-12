@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 
 interface FilterButtonProps {
     label: string;
