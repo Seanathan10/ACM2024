@@ -9,17 +9,20 @@ import { Map, Marker } from "pigeon-maps";
 
 import "./tailwind.css";
 
+import { useEffect, useState } from "react";
+import { getBcycleInformationJSON, getBcycleStatusJSON } from "api/BCycle";
+
 export const links: LinksFunction = () => [
-	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
-	{
-		rel: "preconnect",
-		href: "https://fonts.gstatic.com",
-		crossOrigin: "anonymous",
-	},
-	{
-		rel: "stylesheet",
-		href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-	},
+    { rel: "preconnect", href: "https://fonts.googleapis.com" },
+    {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
+    },
+    {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+    },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -30,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 			</head>
 			<body>
-                    <Map height={750} defaultCenter={[36.995544, -122.06037]} defaultZoom={15}>
+                    <Map height={1500} defaultCenter={[36.995544, -122.06037]} defaultZoom={15}>
                         <Marker width={50} anchor={[50.879, 4.6997]} />
                     </Map>
 				<Scripts />
@@ -40,5 +43,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-	return <Outlet />;
+    const [statusData, setStatusData] = useState({})
+    const [informationData, setInformationData] = useState({})
+    useEffect(() => {
+        async function fetchData() {
+            const status = await getBcycleStatusJSON()
+            const information = await getBcycleInformationJSON()
+            setStatusData(status)
+            setInformationData(information)
+        }
+        fetchData()
+    }, [])
+    return <>
+        Hello
+        <Outlet />;
+    </>
 }
