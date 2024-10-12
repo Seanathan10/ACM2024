@@ -1,12 +1,17 @@
 import { FilterButton } from "./Buttons";
 
-interface FilterButtonProps {
+export interface FilterButtonData {
     label: string;
+    shouldFilter: boolean;
+    filterFunction: (x: object) => object;     // Function takes all the stations and returns the filtered object
+}
+interface FilterButtonProps {
+    filterButtonData: FilterButtonData[];
+    filterCallback: (x: any[]) => void;      // Function takes all the stations and returns the filtered object
 }
 
-export const Filter = ({ label }: FilterButtonProps) => {
+export const Filter = ({ filterButtonData, filterCallback }: FilterButtonProps) => {
     return (
-
         <div style={{
             position: 'fixed',
             top: '12.5%',
@@ -16,7 +21,8 @@ export const Filter = ({ label }: FilterButtonProps) => {
             // justifyItems: 'center',
             // justifyContent: 'center',
             backgroundColor: 'gray',
-            width: '12.5vw',
+            width: '15%',
+            minWidth: '200px',
             padding: 10,
             borderRadius: '10px',
             alignItems: 'center',
@@ -24,7 +30,7 @@ export const Filter = ({ label }: FilterButtonProps) => {
             // filter: 'blur(1px)',
             opacity: 0.85,
             fontWeight: 'bold',
-            fontSize: '1.4vw',
+            fontSize: '20px',
             // boxShadow: '0px 0px 5px .1px black',
 
         }}>
@@ -44,6 +50,6 @@ export const Filter = ({ label }: FilterButtonProps) => {
             <FilterButton label="On Campus" onClick={() => {}}></FilterButton>
             <FilterButton label="Off Campus" onClick={() => {}}></FilterButton>
             <FilterButton label="Available Bikes" onClick={() => {}}></FilterButton>
-        </div>
+        </div> 
     )
 }

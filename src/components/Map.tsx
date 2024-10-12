@@ -1,11 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
-import { Filter } from "./components/Filter";
+import { Filter, FilterButtonData } from "./Filter";
 
-import "./App.css";
+import "../App.css";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 
+// const filters = {
+  
+// }
 // interface MovingObject {
 //   id: number;
 //   name: string;
@@ -19,10 +22,11 @@ interface MapProps {
 
 const MapComponent: React.FC<MapProps> = ({ information, status }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
-
+  const [stations, setStations] = React.useState([]);
   //   const movingObjects: MovingObject[] = [
   //     // Define your moving objects here
   //   ];
+
 
   useEffect(() => {
     console.log("Updated statusData:", JSON.stringify(status, null, 2));
@@ -224,13 +228,38 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
     }
   }, [information, informationData, status]);
 
+  const filterButtons: FilterButtonData[] = [
+    {
+      label: "On Campus",
+      shouldFilter: false,
+      filterFunction: (stations) => stations.filter(station => station['data']['stations']['num_docks_available'] = 1),
+    },
+    {
+      label: "Off Campus",
+      shouldFilter: false,
+      filterFunction: (stations) => stations.filter(station => !station.onCampus),
+    },
+    {
+      label: "Available Bikes",
+      shouldFilter: false,
+      filterFunction: (stations) => stations.filter(station => station['data']['stations']['num_docks_available'] > 0),
+    },
+  ];
+  const updateFilteredStations = (stations: any[]) => {
+    filterButtons.forEach((button: FilterButtonData) => {
+      if (button.shouldFilter) {
+        stations = button.filterFunction(stations);
+      }
+    });
+  };
   return (
     <>
-      <div
+    {JSON.stringify(status)} hello
+      {/* <div
         ref={mapContainer}
         style={{ position: "absolute", top: 0, bottom: 0, width: "100%" }}
-      />
-      <Filter label="asdsad"></Filter>
+      /> */}
+      <Filter filterButtonData={filterButtons} filterCallback={(filteredStations) => updateFilteredStations(filteredStations)}></Filter>
     </>
   );
 };
