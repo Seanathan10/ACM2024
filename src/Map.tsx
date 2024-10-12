@@ -41,8 +41,8 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
       "pk.eyJ1Ijoic2VhbmF0aGFuMTAiLCJhIjoiY2x1ZXBndzRzMXZ1ajJrcDY1Y2h5N3ZlNyJ9.yEdc6z0JDvIigDJyc2zfZg";
 
     const bounds = [
-      [-122.100, 25.948], // Southwest coordinates
-      [-121.949, 39.005], // Northeast coordinates
+      [-122.100, 36.948], // Southwest coordinates
+      [-121.949, 37.005], // Northeast coordinates
     ];
 
     if (mapContainer.current) {
@@ -52,7 +52,7 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
         style: "mapbox://styles/mapbox/standard",
         center: [-122.0584, 36.9905],
         zoom: 14,
-        maxZoom: 19,
+        maxZoom: 21,
         maxBounds: bounds,
       });
 
@@ -71,7 +71,7 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
 
           this.input = document.createElement("input");
           this.input.type = "range";
-          this.input.min = 118;
+          this.input.min = 130;
           this.input.max = 180;
           this.createAttribute(this.input, "value", map.getZoom() * 10);
           this.input.className = "slider";
