@@ -1,11 +1,4 @@
 import { useState } from "react";
-import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  DialogTitle,
-  TransitionChild,
-} from "@headlessui/react";
 // import { XMarkIcon } from '@heroicons/react/24/outline'
 import "./SidePanel.css";
 
@@ -29,13 +22,21 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 
+import BikeIcon from '../assets/sidepanel/bike.svg';
+import DockIcon from '../assets/sidepanel/dock.svg';
+
+
 interface SidePanelProps {
   stationID: string;
+  stationIndex: string,
+  status: any;
+  information: any;
 }
 
 const drawerWidth = 440;
 
-export const SidePanel = ({ stationID }: SidePanelProps) => {
+
+export const SidePanel = ({ stationID, stationIndex, status, information }: SidePanelProps) => {
   const [open, setOpen] = useState(true);
 
   const Main = styled("main", {
@@ -84,42 +85,6 @@ export const SidePanel = ({ stationID }: SidePanelProps) => {
   };
 
   return (
-    // <Dialog open={open} onClose={() => setOpen(false)} className="side-panel-dialog">
-    //   {/* <DialogBackdrop
-    //     transition
-    //     className="side-panel-backdrop"
-    //   /> */}
-
-    //   <div className="side-panel-fixed-container">
-    //     <div className="side-panel-absolute-container">
-    //       <div className="side-panel-inner-container">
-    //         <DialogPanel
-    //           transition
-    //           className="side-panel-dialog-panel"
-    //         >
-    //           <TransitionChild>
-    //             <div className="side-panel-close-button-container">
-    //               <button
-    //                 type="button"
-    //                 onClick={() => setOpen(false)}
-    //                 className="side-panel-close-button"
-    //               >
-    //                 <span className="side-panel-invisible-span" />
-    //                 <span className="sr-only">Close panel</span>
-    //               </button>
-    //             </div>
-    //           </TransitionChild>
-    //           <div className="side-panel-content">
-    //             <div className="side-panel-title">
-    //               <DialogTitle>Panel title</DialogTitle>
-    //             </div>
-    //             <div className="side-panel-body">{/* Your content here */}</div>
-    //           </div>
-    //         </DialogPanel>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </Dialog>
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <Drawer
@@ -136,6 +101,11 @@ export const SidePanel = ({ stationID }: SidePanelProps) => {
         open={open}
       >
         <DrawerHeader>
+        <Box sx={{ padding: 2 }}>
+          <Typography variant="h6" component="div">
+            {`Station Details: ${information?.data?.stations?.[stationIndex]?.address ?? "Default Address"}`}
+          </Typography>
+        </Box>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
@@ -146,6 +116,22 @@ export const SidePanel = ({ stationID }: SidePanelProps) => {
         </DrawerHeader>
         <Divider />
         <List>
+          {[
+            { text: "Bikes", icon: <img src={BikeIcon} alt="Bike" width={24} height={24} style={{ filter: "brightness(0) saturate(100%) invert(0%)" }} /> },
+            { text: "Docks", icon: <img src={DockIcon} alt="Dock" width={24} height={24} style={{ filter: "brightness(0) saturate(100%) invert(0%)" }} /> }
+          ].map((item, index) => (
+            <ListItem key={item.text} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+        {/* <List>
           {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
@@ -169,7 +155,7 @@ export const SidePanel = ({ stationID }: SidePanelProps) => {
               </ListItemButton>
             </ListItem>
           ))}
-        </List>
+        </List> */}
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
