@@ -26,7 +26,6 @@ export default function App() {
       Hello
       {/* <Outlet />; */}
       <MapComponent information = {informationData} status={statusData}></MapComponent>
-      <HistoricalChart stationID="bcycle_santacruz_7434"/>
     </>
   );
 }
