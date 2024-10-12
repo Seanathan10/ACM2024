@@ -1,10 +1,6 @@
-import React from "react";
-// import { Map, Marker } from "pigeon-maps";
-
 import MapComponent from "./Map";
 
 import { useEffect, useState } from "react";
-import { FilterButton } from "./components/Buttons";
 import { getBcycleInformationJSON, getBcycleStatusJSON } from "./api/BCycle";
 // import { getBcycleInformationJSON, getBcycleStatusJSON } from "api/BCycle";
 
