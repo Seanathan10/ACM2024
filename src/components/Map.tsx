@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import mapboxgl from "mapbox-gl";
-import { Filter, FilterButtonData } from "./Filter";
+import mapboxgl, { Map } from "mapbox-gl";
+import { Filter } from "./components/Filter";
 
 import "../App.css";
 
@@ -15,12 +15,37 @@ import "mapbox-gl/dist/mapbox-gl.css";
 //   coordinates: number[];
 // }
 
+const markers = {};
+
+for (let i = 0; i <= 30; i++) {
+  try {
+    const module = await import(`./assets/markers/marker-${i}.svg`);
+    markers[`marker_${i}`] = module.default;
+  } catch (error) {
+    console.error(`Failed to load marker-${i}.svg:`, error);
+  }
+}
+
+
 interface MapProps {
-  information: any;
-  status: any;
+  information: {
+    data: {
+      stations: {
+        name: string;
+        address: string;
+        lon: number;
+        lat: number;
+      }[];
+    };
+  };
+  status: {
+    isLoading: boolean;
+    error: string | null;
+  };
 }
 
 const MapComponent: React.FC<MapProps> = ({ information, status }) => {
+  console.log(information);
   const mapContainer = useRef<HTMLDivElement>(null);
   const [stations, setStations] = React.useState([]);
   //   const movingObjects: MovingObject[] = [
@@ -40,15 +65,16 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
   }, [information]);
 
   const informationData = JSON.stringify(information, null, 2);
-  console.log("c", informationData);
 
   useEffect(() => {
     mapboxgl.accessToken =
       "pk.eyJ1Ijoic2VhbmF0aGFuMTAiLCJhIjoiY2x1ZXBndzRzMXZ1ajJrcDY1Y2h5N3ZlNyJ9.yEdc6z0JDvIigDJyc2zfZg";
 
-    const bounds = [
-      [-122.1, 36.948], // Southwest coordinates
-      [-121.949, 37.005], // Northeast coordinates
+    const bounds: [number, number, number, number] = [
+      -122.1,
+      36.948, // Southwest coordinates
+      -121.949,
+      37.005, // Northeast coordinates
     ];
 
     if (mapContainer.current) {
@@ -69,7 +95,11 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
       map.addControl(new mapboxgl.GeolocateControl(), "bottom-right");
 
       class CustomZoomControl {
-        onAdd(map) {
+        container!: HTMLDivElement;
+        input!: HTMLInputElement;
+        map: mapboxgl.Map | undefined;
+
+        onAdd(map: mapboxgl.Map) {
           this.map = map;
 
           this.container = document.createElement("div");
@@ -77,8 +107,8 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
 
           this.input = document.createElement("input");
           this.input.type = "range";
-          this.input.min = 130;
-          this.input.max = 180;
+          this.input.min = "132";
+          this.input.max = "180";
           this.createAttribute(this.input, "value", map.getZoom() * 10);
           this.input.className = "slider";
           this.input.id = "myRange";
@@ -86,26 +116,33 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
           this.container.appendChild(this.input);
 
           // Update the current slider value (each time you drag the slider handle)
-          this.input.oninput = function () {
-            map.setZoom(this.value / 10);
+          this.input.oninput = () => {
+            map.setZoom(Number(this.input.value) / 10);
           };
 
           return this.container;
         }
         onRemove() {
-          this.container.parentNode.removeChild(this.container);
+          if (this.container.parentNode) {
+            this.container.parentNode.removeChild(this.container);
+          }
           this.map = undefined;
         }
 
-        createAttribute(obj, attrName, attrValue) {
-          var att = document.createAttribute(attrName);
-          att.value = attrValue;
+        createAttribute(
+          obj: HTMLInputElement,
+          attrName: string,
+          attrValue: string | number
+        ) {
+          const att = document.createAttribute(attrName);
+          att.value = String(attrValue);
           obj.setAttributeNode(att);
         }
 
         update() {
-          let zoom = map.getZoom() * 10;
-          if (this.input.value != zoom) this.input.value = zoom;
+          const zoom = map.getZoom() * 10;
+          if (Number(this.input.value) !== zoom)
+            this.input.value = zoom.toString();
         }
       }
 
@@ -119,7 +156,11 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
       });
 
       class CustomPitchControl {
-        onAdd(map) {
+        container!: HTMLDivElement;
+        input!: HTMLInputElement;
+        map: mapboxgl.Map | undefined;
+
+        onAdd(map: Map) {
           this.map = map;
 
           this.container = document.createElement("div");
@@ -127,8 +168,8 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
 
           this.input = document.createElement("input");
           this.input.type = "range";
-          this.input.min = 1;
-          this.input.max = 800;
+          this.input.min = "1";
+          this.input.max = "800";
           this.createAttribute(this.input, "value", map.getPitch() * 10);
           this.input.className = "slider";
           this.input.id = "myRange";
@@ -136,26 +177,28 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
           this.container.appendChild(this.input);
 
           // Update the current slider value (each time you drag the slider handle)
-          this.input.oninput = function () {
-            map.setPitch(this.value / 10);
+          this.input.oninput = () => {
+            map.setPitch(Number(this.input.value) / 10);
           };
 
           return this.container;
         }
         onRemove() {
-          this.container.parentNode.removeChild(this.container);
+          if (this.container.parentNode) {
+            this.container.parentNode.removeChild(this.container);
+          }
           this.map = undefined;
         }
 
-        createAttribute(obj, attrName, attrValue) {
-          var att = document.createAttribute(attrName);
-          att.value = attrValue;
+        createAttribute(obj: HTMLInputElement, attrName: string, attrValue: string | number) {
+          const att = document.createAttribute(attrName);
+          att.value = String( attrValue );
           obj.setAttributeNode(att);
         }
 
         update() {
-          let pitch = map.getPitch() * 10;
-          if (this.input.value != zoom) this.input.value = pitch;
+          const pitch = map.getPitch() * 10;
+          if (this.input.value !== pitch.toString()) this.input.value = pitch.toString();
         }
       }
 
@@ -168,62 +211,62 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
         });
       });
 
-      //   map.addControl(
-      //     new mapboxgl.AttributionControl({
-      //       customAttribution: "Map design by GOATED ACM HACK",
-      //     }),
-      //     "bottom-right"
-      //   );
-
       // Add your custom markers and lines here
-      console.log("s", informationData);
       if (information && information.data && information.data.stations) {
-        information.data.stations.map((station: any) => {
-          console.log("z", station);
+        information.data.stations.map(
+          (station: {
+            name: string;
+            address: string;
+            lon: number;
+            lat: number;
+          }, index: number) => {
+            const popup = new mapboxgl.Popup({
+              offset: 25,
+              className: "main-popup",
+              closeButton: false,
+            }).setHTML(`<h3>${station.name}</h3><p>${station.address}</p>`);
 
-          const popup = new mapboxgl.Popup({
-            offset: 25,
-            className: "main-popup",
-            closeButton: false,
-          }).setHTML(`<h3>${station.name}</h3><p>${station.address}</p>`);
+          let marker;
 
-          const marker = new mapboxgl.Marker().setLngLat([
-            station.lon,
-            station.lat,
-          ]);
+          if (status && status.data && status.data.stations && status.data.stations[index] && status.data.stations[index].is_renting) {
+            const imgElement = document.createElement('img');
 
-          marker.getElement().addEventListener("mouseenter", () => {
-            popup.addTo(map);
-          });
-          marker.getElement().addEventListener("mouseleave", () => {
-            popup.remove();
-          });
+            imgElement.src = markers[`marker_${Math.min(status.data.stations[index].num_bikes_available, 30)}`];
 
-          marker.setPopup(popup);
-          marker.addTo(map);
+            marker = new mapboxgl.Marker({element: imgElement}).setLngLat([
+              station.lon,
+              station.lat,
+            ]);
+          } else {
+            marker = new mapboxgl.Marker({color: "#808080"}).setLngLat([
+              station.lon,
+              station.lat,
+            ]);
+          }
 
-          marker.getElement().addEventListener("click", () => {
-            alert(
-              "Station: " + station.name + "\n" + "Address: " + station.address
-            );
-          });
-        });
+            marker.setPopup(popup);
+            marker.addTo(map);
+
+            marker.getElement().addEventListener("mouseenter", () => {
+              popup.addTo(map);
+            });
+            marker.getElement().addEventListener("mouseleave", () => {
+              popup.remove();
+            });
+
+            marker.getElement().addEventListener("click", () => {
+              alert(
+                "Station: " +
+                  station.name +
+                  "\n" +
+                  "Address: " +
+                  station.address
+              );
+            });
+          }
+        );
       }
 
-      // TOPOGRAPHICAL MAP
-      //   map.on('load', () => {
-      //     map.addLayer({
-      //       id: 'terrain-data',
-      //       type: 'line',
-      //       source: {
-      //         type: 'vector',
-      //         url: 'mapbox://mapbox.mapbox-terrain-v2'
-      //       },
-      //       'source-layer': 'contour'
-      //     });
-      //   });
-
-      // Clean up on unmount
       return () => map.remove();
     }
   }, [information, informationData, status]);
