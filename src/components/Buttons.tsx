@@ -8,8 +8,8 @@ interface FilterButtonProps {
 export const FilterButton = ({label, onClick}: FilterButtonProps) => {    // Rounded rectangle buttons on right side of page to 
     // filter bcycle stops by on/off campus, stations with available bikes, 
     return (
-        <div>
-            <button style={{ borderRadius: 25, padding: 10, backgroundColor: 'gray', position: 'fixed', top: '10%', right: '5%' }} onClick={onClick}>{label}</button>
+        <div style={{ width: 120, fontSize: 15, borderRadius: 5, backgroundColor: 'gray' }}>
+            <button onClick={onClick}>{label}</button>
         </div>
     )
 } 

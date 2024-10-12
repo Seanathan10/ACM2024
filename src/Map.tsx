@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
-import { FilterButton } from "./components/Buttons";
+import { Filter } from "./components/Filter";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -71,7 +71,7 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
 
           this.input = document.createElement("input");
           this.input.type = "range";
-          this.input.min = 118;
+          this.input.min = 130;
           this.input.max = 180;
           this.createAttribute(this.input, "value", map.getZoom() * 10);
           this.input.className = "slider";
@@ -154,11 +154,11 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
       }
 
       map.on("load", function () {
-        const pitchContorl = new CustomPitchControl();
-        map.addControl(pitchContorl, "top-right");
+        const pitchControl = new CustomPitchControl();
+        map.addControl(pitchControl, "top-right");
 
         map.on("pitch", function () {
-          pitchContorl.update();
+          pitchControl.update();
         });
       });
 
@@ -211,7 +211,7 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
         ref={mapContainer}
         style={{ position: "absolute", top: 0, bottom: 0, width: "100%" }}
       />
-      <FilterButton label={"abc"} onClick={() => {}} />
+      <Filter label="asdsad"></Filter>
     </>
   );
 };
