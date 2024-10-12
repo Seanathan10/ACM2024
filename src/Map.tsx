@@ -10,12 +10,32 @@ import "mapbox-gl/dist/mapbox-gl.css";
 //   coordinates: number[];
 // }
 
-const MapComponent: React.FC = () => {
+interface MapProps {
+  information: any,
+  status: any
+}
+
+
+const MapComponent: React.FC<MapProps> = ({information, status}) => {
   const mapContainer = useRef<HTMLDivElement>(null);
 
   //   const movingObjects: MovingObject[] = [
   //     // Define your moving objects here
   //   ];
+
+  useEffect(() => {
+    console.log('Updated statusData:', JSON.stringify(status, null, 2));
+  }, [status]);
+
+  useEffect(() => {
+    console.log('Updated informationData:', JSON.stringify(information, null, 2));
+  }, [information]);
+
+
+
+  const informationData = JSON.stringify(information, null, 2)
+  console.log('c', informationData)
+  
 
   useEffect(() => {
     mapboxgl.accessToken =
@@ -32,18 +52,29 @@ const MapComponent: React.FC = () => {
       });
 
       // Add zoom controls
-      map.addControl(new mapboxgl.NavigationControl(), "top-left");
-      map.addControl(new mapboxgl.FullscreenControl(), "top-left");
       map.addControl(new mapboxgl.ScaleControl(), "bottom-right");
-    //   map.addControl(
+      map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
+      map.addControl(new mapboxgl.FullscreenControl(), "bottom-right");
+      map.addControl(new mapboxgl.GeolocateControl(), "bottom-right");
+      //   map.addControl(
     //     new mapboxgl.AttributionControl({
     //       customAttribution: "Map design by GOATED ACM HACK",
     //     }),
     //     "bottom-right"
     //   );
-      map.addControl(new mapboxgl.GeolocateControl(), "top-left");
 
       // Add your custom markers and lines here
+      console.log('s',  informationData)
+      if (information && information.data && information.data.stations) {
+        information.data.stations.map((station: any) => {
+          console.log('z', station)
+          const marker=new mapboxgl.Marker()
+            .setLngLat([station.lon, station.lat])
+            .addTo(map);
+        })
+      }
+      
+
 
       // TOPOGRAPHICAL MAP
       //   map.on('load', () => {
@@ -61,7 +92,7 @@ const MapComponent: React.FC = () => {
       // Clean up on unmount
       return () => map.remove();
     }
-  }, []);
+  }, [information, status]);
 
   return (
     <>

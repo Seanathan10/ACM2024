@@ -11,18 +11,20 @@ export default function App() {
     async function fetchData() {
       const status = await getBcycleStatusJSON();
       const information = await getBcycleInformationJSON();
+      console.log('a', information)
       setStatusData(status);
       setInformationData(information);
-
-      console.log(statusData);
-      console.log('a', informationData);
     }
     fetchData();
-  }, [informationData, statusData]);
+  }, []);
+
+  // Use another useEffect to log state changes
+  
   return (
     <>
       Hello
-      <MapComponent></MapComponent>
+      {/* <Outlet />; */}
+      <MapComponent information = {informationData} status={statusData}></MapComponent>
     </>
   );
 }
