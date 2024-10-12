@@ -40,6 +40,11 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
     mapboxgl.accessToken =
       "pk.eyJ1Ijoic2VhbmF0aGFuMTAiLCJhIjoiY2x1ZXBndzRzMXZ1ajJrcDY1Y2h5N3ZlNyJ9.yEdc6z0JDvIigDJyc2zfZg";
 
+    const bounds = [
+      [-122.100, 25.948], // Southwest coordinates
+      [-121.949, 39.005], // Northeast coordinates
+    ];
+
     if (mapContainer.current) {
       const map = new mapboxgl.Map({
         attributionControl: false,
@@ -48,6 +53,7 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
         center: [-122.0584, 36.9905],
         zoom: 14,
         maxZoom: 19,
+        maxBounds: bounds,
       });
 
       // Add zoom controls
@@ -55,7 +61,6 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
       map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
       map.addControl(new mapboxgl.FullscreenControl(), "bottom-right");
       map.addControl(new mapboxgl.GeolocateControl(), "bottom-right");
-
 
       class CustomZoomControl {
         onAdd(map) {
@@ -107,12 +112,6 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
         });
       });
 
-
-
-
-
-
-
       class CustomPitchControl {
         onAdd(map) {
           this.map = map;
@@ -159,10 +158,9 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
         map.addControl(pitchContorl, "top-right");
 
         map.on("pitch", function () {
-            pitchContorl.update();
+          pitchContorl.update();
         });
       });
-
 
       //   map.addControl(
       //     new mapboxgl.AttributionControl({
