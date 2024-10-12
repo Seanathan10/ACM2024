@@ -1,13 +1,18 @@
 import MapComponent from "./Map";
-import { HistoricalChart } from "./components/Chart";
-
 
 import { useEffect, useState } from "react";
 import { getBcycleInformationJSON, getBcycleStatusJSON } from "./api/BCycle";
 
 export default function App() {
-  const [statusData, setStatusData] = useState({});
-  const [informationData, setInformationData] = useState({});
+  const [statusData, setStatusData] = useState({
+    isLoading: true,
+    error: null
+  });
+  const [informationData, setInformationData] = useState({
+    data: {
+      stations: []
+    }
+  });
   
   useEffect(() => {
     async function fetchData() {
@@ -24,7 +29,6 @@ export default function App() {
   return (
     <>
       Hello
-      {/* <Outlet />; */}
       <MapComponent information = {informationData} status={statusData}></MapComponent>
     </>
   );
