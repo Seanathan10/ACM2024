@@ -40,10 +40,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 			</head>
 			<body>
-				<Map height={300} defaultCenter={[36.995544, -122.06037]} defaultZoom={15}>
-					<Marker width={50} anchor={[50.879, 4.6997]} />
-				</Map>
-
+                    <Map height={750} defaultCenter={[36.995544, -122.06037]} defaultZoom={15}>
+                        <Marker width={50} anchor={[50.879, 4.6997]} />
+                    </Map>
 				<Scripts />
 			</body>
 		</html>
