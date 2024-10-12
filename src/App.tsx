@@ -4,6 +4,8 @@ import React from "react";
 import MapComponent from "./Map";
 
 import { useEffect, useState } from "react";
+import { FilterButton } from "./components/Buttons";
+import { getBcycleInformationJSON, getBcycleStatusJSON } from "./api/BCycle";
 // import { getBcycleInformationJSON, getBcycleStatusJSON } from "api/BCycle";
 
 // export function Layout({ children }: { children: React.ReactNode }) {
@@ -37,6 +39,9 @@ export default function App() {
       const information = await getBcycleInformationJSON();
       setStatusData(status);
       setInformationData(information);
+
+      console.log(statusData);
+      console.log('a', informationData);
     }
     fetchData();
   }, []);
