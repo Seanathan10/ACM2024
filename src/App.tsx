@@ -1,4 +1,6 @@
 import MapComponent from "./Map";
+import { Chart, HistoricalChart } from "./components/Chart";
+
 
 import { useEffect, useState } from "react";
 import { getBcycleInformationJSON, getBcycleStatusJSON } from "./api/BCycle";
@@ -25,6 +27,7 @@ export default function App() {
       Hello
       {/* <Outlet />; */}
       <MapComponent information = {informationData} status={statusData}></MapComponent>
+      <HistoricalChart stationID="bcycle_santacruz_7434"/>
     </>
   );
 }
