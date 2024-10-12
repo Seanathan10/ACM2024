@@ -1,7 +1,8 @@
-import MapComponent from "./Map";
+import MapComponent from "./components/Map";
 
 import { useEffect, useState } from "react";
 import { getBcycleInformationJSON, getBcycleStatusJSON } from "./api/BCycle";
+import { SidePanel } from "./components/SidePanel";
 
 export default function App() {
   const [statusData, setStatusData] = useState({
@@ -35,6 +36,7 @@ export default function App() {
     <>
       Hello
       <MapComponent information = {informationData} status={statusData}></MapComponent>
+      <SidePanel stationID="bcycle_santacruz_7437"/>
     </>
   );
 }

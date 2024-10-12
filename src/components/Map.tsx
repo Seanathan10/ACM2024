@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import mapboxgl, { Map } from "mapbox-gl";
-import { Filter } from "./components/Filter";
+import { Filter } from "./Filter";
 
 import "../App.css";
 
@@ -19,7 +19,7 @@ const markers = {};
 
 for (let i = 0; i <= 30; i++) {
   try {
-    const module = await import(`./assets/markers/marker-${i}.svg`);
+    const module = await import(`../assets/markers/marker-${i}.svg`);
     markers[`marker_${i}`] = module.default;
   } catch (error) {
     console.error(`Failed to load marker-${i}.svg:`, error);
@@ -298,10 +298,10 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
   return (
     <>
     {JSON.stringify(status)} hello
-      {/* <div
-        ref={mapContainer}
-        style={{ position: "absolute", top: 0, bottom: 0, width: "100%" }}
-      /> */}
+        <div
+          ref={mapContainer}
+          style={{ position: "absolute", top: 0, bottom: 0, width: "100%" }}
+        />
       <Filter filterButtonData={filterButtons} filterCallback={(filteredStations) => updateFilteredStations(filteredStations)}></Filter>
     </>
   );

@@ -13,7 +13,7 @@ export const SidePanel = ({stationID} : SidePanelProps) => {
   const [open, setOpen] = useState(true)
 
   return (
-    <Dialog open={open} onClose={setOpen} className="relative -z-50">
+    <Dialog open={open} onClose={setOpen} className="position: relative; z+999999999999999999999999999999999999999999999999999">
       <DialogBackdrop
         transition
         className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0"
