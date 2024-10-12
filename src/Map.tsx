@@ -92,7 +92,7 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
 
           this.input = document.createElement("input");
           this.input.type = "range";
-          this.input.min = "130";
+          this.input.min = "132";
           this.input.max = "180";
           this.createAttribute(this.input, "value", map.getZoom() * 10);
           this.input.className = "slider";
