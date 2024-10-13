@@ -327,7 +327,6 @@ const MapComponent: React.FC<MapProps> = ({
 
   return (
     <>
-      {JSON.stringify(status)} hello
       <div
         ref={mapContainer}
         style={{ position: "absolute", top: 0, bottom: 0, width: "100%" }}
