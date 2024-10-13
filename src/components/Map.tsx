@@ -295,7 +295,7 @@ const MapComponent: React.FC<MapProps> = ({
 
       return () => map.remove();
     }
-  }, [information, status, openSideBar]);
+  }, [information, status]);
 
 
 
