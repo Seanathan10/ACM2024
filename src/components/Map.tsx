@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import mapboxgl, { Map } from "mapbox-gl";
 import { Filter, FilterButtonData } from "./Filter";
 import { SidePanel } from "./SidePanel";
@@ -59,6 +59,7 @@ const MapComponent: React.FC<MapProps> = ({
   openSideBar,
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
+  const [stations, setStations] = useState();
 
   useEffect(() => {
     console.log("Updated stations:", JSON.stringify(stations, null, 2));
