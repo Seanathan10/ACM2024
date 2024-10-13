@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build --outDir dist/",
+    "build-lite": "vite build --outDir dist/",
     "lint": "eslint .",
     "preview": "vite preview"
   },
