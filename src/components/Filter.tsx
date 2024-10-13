@@ -35,7 +35,7 @@ export const Filter = ({ filterButtonData }: FilterButtonProps) => {
             // justifyItems: 'center',
             // justifyContent: 'center',
             backgroundColor: 'rgba(31, 31, 31, 0.85)',
-            width: '15%',
+            width: '17.5%',
             minWidth: '200px',
             padding: 10,
             borderRadius: '10px',
@@ -55,22 +55,22 @@ export const Filter = ({ filterButtonData }: FilterButtonProps) => {
                 backgroundColor: '',
             }} />
             <label style={{
-                backgroundColor: 'gray',
+                // backgroundColor: 'gray',
                 padding: '5px',
-                borderRadius: '25px',
-                color: 'black',
+                // borderRadius: '25px',
+                color: 'white',
                 fontWeight: 'bold'
-            }}>Filter Stations</label>
+            }}>Filter Stations By...</label>
             {filterButtonData.map((buttonData) => {
                 return (
                     <FilterButton
                         key={buttonData.key}
                         label={buttonData.label}
                         style={{
-                            backgroundColor: buttonData.filterEnabled ? 'white' : 'black',
+                            backgroundColor: buttonData.filterEnabled ? 'mediumspringgreen' : 'black',
                             color: buttonData.filterEnabled ? 'black' : 'white',
                             opacity: buttonData.filterEnabled ? 1 : 0.75,
-                            fontWeight: buttonData.filterEnabled ? 'bold' : 'normal',
+                            fontWeight: buttonData.filterEnabled ? 'bold' : 'bold',
                         }}
                         onClick={() => {
                             buttonData.filterFunction()
