@@ -69,7 +69,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
   }));
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex"  }}>
       <CssBaseline />
       <Drawer
         sx={{
@@ -117,7 +117,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
                   alt="Dock"
                   width={24}
                   height={24}
-                  style={{ filter: "brightness(0) saturate(100%) invert(0%)" }}
+                  style={{ filter: "brightness(0) saturate(100%) invert(0%)"}}
                 />
               ),
             },
@@ -132,6 +132,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
         </List>
         <Divider />
         {/* Pass stationID only if station exists */}
+        <Typography style={{ textAlign: 'center' }}><br/>Average Bcycle availability over time</Typography>
         {station && (
           <HistoricalChart
             stationID={station.station_id}
