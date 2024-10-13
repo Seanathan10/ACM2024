@@ -1,13 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import mapboxgl, { Map } from "mapbox-gl";
 import { Filter, FilterButtonData } from "./Filter";
+import { SidePanel } from "./SidePanel";
 
 import "../App.css";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 
 // const filters = {
-  
+
 // }
 // interface MovingObject {
 //   id: number;
@@ -26,7 +27,6 @@ for (let i = 0; i <= 30; i++) {
   }
 }
 
-
 interface MapProps {
   information: {
     data: {
@@ -35,6 +35,7 @@ interface MapProps {
         address: string;
         lon: number;
         lat: number;
+        stationID: string;
       }[];
     };
   };
@@ -48,28 +49,16 @@ interface MapProps {
     isLoading: boolean;
     error: string | null;
   };
+//   openSideBar: boolean;
+//   closeSideBar: (open: boolean) => void;
 }
 
-const MapComponent: React.FC<MapProps> = ({ information, status }) => {
-  console.log(information);
+const MapComponent: React.FC<MapProps> = ({
+  information,
+  status,
+  openSideBar,
+}) => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  //   const movingObjects: MovingObject[] = [
-    //     // Define your moving objects here
-    //   ];
-    
-    useEffect(() => {
-      console.log("Updated statusData:", JSON.stringify(status, null, 2));
-    }, [status]);
-    
-    useEffect(() => {
-      console.log(
-        "Updated informationData:",
-        JSON.stringify(information, null, 2)
-      );
-    }, [information]);
-    
-    const informationData = JSON.stringify(information, null, 2);
-    const [stations, setStations] = React.useState();
 
   useEffect(() => {
     console.log("Updated stations:", JSON.stringify(stations, null, 2));
@@ -196,15 +185,20 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
           this.map = undefined;
         }
 
-        createAttribute(obj: HTMLInputElement, attrName: string, attrValue: string | number) {
+        createAttribute(
+          obj: HTMLInputElement,
+          attrName: string,
+          attrValue: string | number
+        ) {
           const att = document.createAttribute(attrName);
-          att.value = String( attrValue );
+          att.value = String(attrValue);
           obj.setAttributeNode(att);
         }
 
         update() {
           const pitch = map.getPitch() * 10;
-          if (this.input.value !== pitch.toString()) this.input.value = pitch.toString();
+          if (this.input.value !== pitch.toString())
+            this.input.value = pitch.toString();
         }
       }
 
@@ -220,35 +214,51 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
       // Add your custom markers and lines here
       if (information && information.data && information.data.stations) {
         information.data.stations.map(
-          (station: {
-            name: string;
-            address: string;
-            lon: number;
-            lat: number;
-          }, index: number) => {
+          (
+            station: {
+              name: string;
+              address: string;
+              lon: number;
+              lat: number;
+              stationID: string;
+            },
+            index: number
+          ) => {
             const popup = new mapboxgl.Popup({
               offset: 25,
               className: "main-popup",
               closeButton: false,
             }).setHTML(`<h3>${station.name}</h3><p>${station.address}</p>`);
 
-          let marker;
+            let marker;
 
-          if (status && status.data && status.data.stations && status.data.stations[index] && status.data.stations[index].is_renting) {
-            const imgElement = document.createElement('img');
+            if (
+              status &&
+              status.data &&
+              status.data.stations &&
+              status.data.stations[index] &&
+              status.data.stations[index].is_renting
+            ) {
+              const imgElement = document.createElement("img");
 
-            imgElement.src = markers[`marker_${Math.min(status.data.stations[index].num_bikes_available, 30)}`];
+              imgElement.src =
+                markers[
+                  `marker_${Math.min(
+                    status.data.stations[index].num_bikes_available,
+                    30
+                  )}`
+                ];
 
-            marker = new mapboxgl.Marker({element: imgElement}).setLngLat([
-              station.lon,
-              station.lat,
-            ]);
-          } else {
-            marker = new mapboxgl.Marker({color: "#808080"}).setLngLat([
-              station.lon,
-              station.lat,
-            ]);
-          }
+              marker = new mapboxgl.Marker({ element: imgElement }).setLngLat([
+                station.lon,
+                station.lat,
+              ]);
+            } else {
+              marker = new mapboxgl.Marker({ color: "#808080" }).setLngLat([
+                station.lon,
+                station.lat,
+              ]);
+            }
 
             marker.setPopup(popup);
             marker.addTo(map);
@@ -268,6 +278,15 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
                   "Address: " +
                   station.address
               );
+              openSideBar(station); // Pass the station object to openSideBar
+              // console.log("SideBarOpen: ", getDrawerState());
+
+
+			  // openSideBar();
+
+              // return (
+              //   <SidePanel station
+              // );
             });
           }
         );
@@ -275,7 +294,13 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
 
       return () => map.remove();
     }
-  }, [information, informationData, status]);
+  }, [information, status, openSideBar]);
+
+
+
+
+
+
 
   const filterButtons: FilterButtonData[] = [
     {
@@ -301,11 +326,17 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
 
   return (
     <>
-        <div
-          ref={mapContainer}
-          style={{ position: "absolute", top: 0, bottom: 0, width: "100%" }}
-        />
-      <Filter filterButtonData={filterButtons} stations={status} filterCallback={filteredStations => setStations(filteredStations)}></Filter>
+      {JSON.stringify(status)} hello
+      <div
+        ref={mapContainer}
+        style={{ position: "absolute", top: 0, bottom: 0, width: "100%" }}
+      />
+      <Filter
+        filterButtonData={filterButtons}
+        filterCallback={(filteredStations) =>
+          updateFilteredStations(filteredStations)
+        }
+      ></Filter>
     </>
   );
 };
