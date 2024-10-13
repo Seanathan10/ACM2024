@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import mapboxgl, { Map } from "mapbox-gl";
+import mapboxgl, { Map, Marker } from "mapbox-gl";
 import { Filter, FilterButtonData } from "./Filter";
 import { SidePanel } from "./SidePanel";
 
@@ -49,6 +49,12 @@ interface MapProps {
     isLoading: boolean;
     error: string | null;
   };
+  filters: {
+    onCampus: boolean;
+    offCampus: boolean;
+    onlyAvailable: boolean;
+  },
+  setFilters: (onCampus: boolean, offCampus: boolean, onlyAvailable: boolean) => void;
   openSideBar: (station: any, index: number) => void;
 //   closeSideBar: (open: boolean) => void;
 }
@@ -56,13 +62,13 @@ interface MapProps {
 const MapComponent: React.FC<MapProps> = ({
   information,
   status,
+  filters,
+  setFilters,
   openSideBar,
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const [stationsToShow, setStationsToShow] = useState();
 
   useEffect(() => {
-    console.log("Updated stations:", JSON.stringify(stationsToShow, null, 2));
     mapboxgl.accessToken =
       "pk.eyJ1Ijoic2VhbmF0aGFuMTAiLCJhIjoiY2x1ZXBndzRzMXZ1ajJrcDY1Y2h5N3ZlNyJ9.yEdc6z0JDvIigDJyc2zfZg";
 
@@ -225,6 +231,8 @@ const MapComponent: React.FC<MapProps> = ({
             },
             index: number
           ) => {
+
+            const isOnCampus = !(station.lon < -122.04 && station.lat < 37)
             const popup = new mapboxgl.Popup({
               offset: 25,
               className: "main-popup",
@@ -234,95 +242,88 @@ const MapComponent: React.FC<MapProps> = ({
             let marker;
 
             if (
-              status &&
-              status.data &&
-              status.data.stations &&
-              status.data.stations[index] &&
-              status.data.stations[index].is_renting
+              ((filters.onCampus && isOnCampus) || (filters.offCampus && !isOnCampus))
             ) {
-              const imgElement = document.createElement("img");
-
-              imgElement.src =
-                markers[
-                  `marker_${Math.min(
-                    status.data.stations[index].num_bikes_available,
-                    30
-                  )}`
-                ];
-
-              marker = new mapboxgl.Marker({ element: imgElement }).setLngLat([
-                station.lon,
-                station.lat,
-              ]);
-            } else {
-              marker = new mapboxgl.Marker({ color: "#808080" }).setLngLat([
-                station.lon,
-                station.lat,
-              ]);
+              if (
+                status &&
+                status.data &&
+                status.data.stations &&
+                status.data.stations[index] &&
+                status.data.stations[index].is_renting &&
+                (!filters.onlyAvailable || status.data.stations[index].num_bikes_available > 0)
+              ) {
+                const imgElement = document.createElement("img");
+  
+                imgElement.src =
+                  markers[
+                    `marker_${Math.min(
+                      status.data.stations[index].num_bikes_available,
+                      30
+                    )}`
+                  ];
+  
+                marker = new mapboxgl.Marker({ element: imgElement }).setLngLat([
+                  station.lon,
+                  station.lat,
+                ]);
+              } else if (!filters.onlyAvailable) {
+                marker = new mapboxgl.Marker({ color: "#808080" }).setLngLat([
+                  station.lon,
+                  station.lat,
+                ]);
+              }
             }
 
-            marker.setPopup(popup);
-            marker.addTo(map);
+            if (marker) {
+              marker.setPopup(popup);
+              marker.addTo(map);
+  
+              marker.getElement().addEventListener("mouseenter", () => {
+                popup.addTo(map);
+              });
+              marker.getElement().addEventListener("mouseleave", () => {
+                popup.remove();
+              });
+  
+              marker.getElement().addEventListener("click", () => {
+                openSideBar(station, index); // Pass the station object to openSideBar
+              });
+            }
 
-            marker.getElement().addEventListener("mouseenter", () => {
-              popup.addTo(map);
-            });
-            marker.getElement().addEventListener("mouseleave", () => {
-              popup.remove();
-            });
-
-            marker.getElement().addEventListener("click", () => {
-              // alert(
-              //   "Station: " +
-              //     station.name +
-              //     "\n" +
-              //     "Address: " +
-              //     station.address
-              // );
-              openSideBar(station, index); // Pass the station object to openSideBar
-              // console.log("SideBarOpen: ", getDrawerState());
-
-
-			  // openSideBar();
-
-              // return (
-              //   <SidePanel station
-              // );
-            });
+            
           }
         );
       }
 
       return () => map.remove();
     }
-  }, [information, status]);
+  }, [information, status, filters]);
 
 
 
 
 
-
+  console.log("filters", filters)
 
   const filterButtons: FilterButtonData[] = [
     {
       label: "On Campus",
       key: "onCampus",
-      filterEnabled: false,
-      filterFunction: (stations: objects) => station['data']['stations'].filter((station: object[]) => station['data']['stations']['num_docks_available'] = 1),
+      filterEnabled: filters.onCampus,
+      filterFunction: () => { setFilters (!filters.onCampus, filters.offCampus, filters.onlyAvailable) },
     },
     {
       label: "Off Campus",
       key: "offCampus",
-      filterEnabled: false,
-      filterFunction: (stations: object) => stations['data']['stations'].filter((station: object[]) => !station.onCampus),
+      filterEnabled: filters.offCampus,
+      filterFunction: () => { setFilters (filters.onCampus, !filters.offCampus, filters.onlyAvailable) },
     },
     {
       label: "Has Available Bikes",
-      key: "hasAvailableBikes",
-      filterEnabled: false,
-      filterFunction: (stations) => { return stations['data']['stations'].filter(station => station['num_bikes_available'] > 0);
-      },
-    },
+      key: "onlyAvailable",
+      filterEnabled: filters.onlyAvailable,
+      filterFunction: () => { setFilters (filters.onCampus, filters.offCampus, !filters.onlyAvailable) },
+    }
   ];
 
   return (
@@ -334,9 +335,6 @@ const MapComponent: React.FC<MapProps> = ({
       <Filter
         filterButtonData={filterButtons}
         stations={status}
-        filterCallback={(filteredStations) =>
-          setStationsToShow(filteredStations)
-        }
       ></Filter>
     </>
   );

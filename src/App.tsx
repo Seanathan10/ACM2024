@@ -29,6 +29,12 @@ export default function App() {
     },
   });
 
+  const [filterData, setFilterData] = useState({
+    onCampus: true,
+    offCampus: true,
+    onlyAvailable: false
+  })
+
   useEffect(() => {
     async function fetchData() {
       const status = await getBcycleStatusJSON();
@@ -49,6 +55,8 @@ export default function App() {
       <MapComponent
         information={informationData}
         status={statusData}
+        filters={filterData}
+        setFilters={(onCampus, offCampus, onlyAvailable) => setFilterData({onCampus, offCampus, onlyAvailable})}      
         openSideBar={handleDrawerOpen}
       />
 
