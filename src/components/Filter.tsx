@@ -1,16 +1,31 @@
+import { useState } from "react";
 import { FilterButton } from "./Buttons";
+import { useEffect } from "react";
 
 export interface FilterButtonData {
     label: string;
-    shouldFilter: boolean;
-    filterFunction: (x: object) => object;     // Function takes all the stations and returns the filtered object
+    key: string;
+    filterEnabled: boolean;
+    filterFunction: (x: object) => object[];     // Function takes all the stations and returns the filtered object
 }
 interface FilterButtonProps {
     filterButtonData: FilterButtonData[];
-    filterCallback: (x: any[]) => void;      // Function takes all the stations and returns the filtered object
+    stations: any[];
+    filterCallback: (x: object[]) => void;      // Function takes all the stations and returns the filtered object
 }
 
-export const Filter = ({ filterButtonData, filterCallback }: FilterButtonProps) => {
+export const Filter = ({ filterButtonData, filterCallback, stations }: FilterButtonProps) => {
+    const [filterButtonToggles, setFilterButtonToggles] = useState<Record<string, boolean>>({});
+
+    useEffect(() => {
+        const initialToggles = filterButtonData.reduce((acc, buttonData) => {
+            acc[buttonData.key] = buttonData.filterEnabled;
+            return acc;
+        }, {} as Record<string, boolean>);
+        setFilterButtonToggles(initialToggles);
+        console.log(filterButtonToggles);
+    }, []);
+
     return (
         <div style={{
             position: 'fixed',
@@ -47,9 +62,42 @@ export const Filter = ({ filterButtonData, filterCallback }: FilterButtonProps) 
                 color: 'black',
                 fontWeight: 'bold'
             }}>Filter Stations</label>
-            <FilterButton label="On Campus" onClick={() => {}}></FilterButton>
-            <FilterButton label="Off Campus" onClick={() => {}}></FilterButton>
-            <FilterButton label="Available Bikes" onClick={() => {}}></FilterButton>
+            {filterButtonData.map((buttonData) => {
+                return (
+                    <FilterButton
+                        key={buttonData.key}
+                        label={buttonData.label}
+                        onClick={() => {
+                            const newToggles = { ...filterButtonToggles };
+                            console.log('newToggles', newToggles);
+                            newToggles[buttonData.key] = !newToggles[buttonData.key];
+                            console.log('newToggles1', newToggles);
+
+                            let filteredStations: object[] = [] // For each toggle that is true, filter the stations by all the filter functions in
+                            let temp = stations;
+                            
+                            filterButtonData.forEach((button) => {
+                                if (newToggles[button.key]) {
+                                    // If the button is toggled on, apply the filter
+                                    temp = button.filterFunction(temp); // I am stupid
+                                    
+                                    console.log('stations filterde', temp);
+                                    filteredStations = filteredStations.concat(temp);
+                                }
+                            })
+                            // Return a mapping of unique station ids to boolean values whether they are shown or not 
+                            let stationsToShow: Record<string, boolean> = filteredStations.map((station) => {
+                                station['data']['stations']['station_id'] = true;
+                            }
+                            )
+                            console.log('stationsToShow', stationsToShow);
+
+                            filterCallback(filteredStations);
+                        }}
+                    />
+                );
+            }
+        )}
         </div> 
     )
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import mapboxgl, { Map } from "mapbox-gl";
-import { Filter } from "./Filter";
+import { Filter, FilterButtonData } from "./Filter";
 
 import "../App.css";
 
@@ -39,6 +39,12 @@ interface MapProps {
     };
   };
   status: {
+    data: {
+      stations: {
+        num_bikes_available: number;
+        is_renting: boolean;
+      }[];
+    };
     isLoading: boolean;
     error: string | null;
   };
@@ -47,26 +53,26 @@ interface MapProps {
 const MapComponent: React.FC<MapProps> = ({ information, status }) => {
   console.log(information);
   const mapContainer = useRef<HTMLDivElement>(null);
-  const [stations, setStations] = React.useState([]);
   //   const movingObjects: MovingObject[] = [
-  //     // Define your moving objects here
-  //   ];
-
+    //     // Define your moving objects here
+    //   ];
+    
+    useEffect(() => {
+      console.log("Updated statusData:", JSON.stringify(status, null, 2));
+    }, [status]);
+    
+    useEffect(() => {
+      console.log(
+        "Updated informationData:",
+        JSON.stringify(information, null, 2)
+      );
+    }, [information]);
+    
+    const informationData = JSON.stringify(information, null, 2);
+    const [stations, setStations] = React.useState();
 
   useEffect(() => {
-    console.log("Updated statusData:", JSON.stringify(status, null, 2));
-  }, [status]);
-
-  useEffect(() => {
-    console.log(
-      "Updated informationData:",
-      JSON.stringify(information, null, 2)
-    );
-  }, [information]);
-
-  const informationData = JSON.stringify(information, null, 2);
-
-  useEffect(() => {
+    console.log("Updated stations:", JSON.stringify(stations, null, 2));
     mapboxgl.accessToken =
       "pk.eyJ1Ijoic2VhbmF0aGFuMTAiLCJhIjoiY2x1ZXBndzRzMXZ1ajJrcDY1Y2h5N3ZlNyJ9.yEdc6z0JDvIigDJyc2zfZg";
 
@@ -274,32 +280,32 @@ const MapComponent: React.FC<MapProps> = ({ information, status }) => {
   const filterButtons: FilterButtonData[] = [
     {
       label: "On Campus",
-      filterFunction: (stations) => stations.filter(station => station['data']['stations']['num_docks_available'] = 1),
+      key: "onCampus",
+      filterEnabled: false,
+      filterFunction: (stations: objects) => station['data']['stations'].filter((station: object[]) => station['data']['stations']['num_docks_available'] = 1),
     },
     {
       label: "Off Campus",
-      filterFunction: (stations) => stations.filter(station => !station.onCampus),
+      key: "offCampus",
+      filterEnabled: false,
+      filterFunction: (stations: object) => stations['data']['stations'].filter((station: object[]) => !station.onCampus),
     },
     {
-      label: "Available Bikes",
-      filterFunction: (stations) => stations.filter(station => station['data']['stations']['num_docks_available'] > 0),
+      label: "Has Available Bikes",
+      key: "hasAvailableBikes",
+      filterEnabled: false,
+      filterFunction: (stations) => { return stations['data']['stations'].filter(station => station['num_bikes_available'] > 0);
+      },
     },
   ];
-  const updateFilteredStations = (stations: any[]) => {
-    filterButtons.forEach((button: FilterButtonData) => {
-      if (button.shouldFilter) {
-        stations = button.filterFunction(stations);
-      }
-    });
-  };
+
   return (
     <>
-    {JSON.stringify(status)} hello
         <div
           ref={mapContainer}
           style={{ position: "absolute", top: 0, bottom: 0, width: "100%" }}
         />
-      <Filter filterButtonData={filterButtons} filterCallback={(filteredStations) => updateFilteredStations(filteredStations)}></Filter>
+      <Filter filterButtonData={filterButtons} stations={status} filterCallback={filteredStations => setStations(filteredStations)}></Filter>
     </>
   );
 };
