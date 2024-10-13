@@ -232,7 +232,7 @@ const MapComponent: React.FC<MapProps> = ({
             index: number
           ) => {
 
-            const isOnCampus = !(station.lon < -122.04 && station.lat < 37)
+            const isOnCampus = (station.lat > 36.9765 && station.lon < -122.045)
             const popup = new mapboxgl.Popup({
               offset: 25,
               className: "main-popup",
