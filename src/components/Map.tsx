@@ -272,14 +272,14 @@ const MapComponent: React.FC<MapProps> = ({
             });
 
             marker.getElement().addEventListener("click", () => {
-              alert(
-                "Station: " +
-                  station.name +
-                  "\n" +
-                  "Address: " +
-                  station.address
-              );
-              openSideBar(station); // Pass the station object to openSideBar
+              // alert(
+              //   "Station: " +
+              //     station.name +
+              //     "\n" +
+              //     "Address: " +
+              //     station.address
+              // );
+              openSideBar(station, index); // Pass the station object to openSideBar
               // console.log("SideBarOpen: ", getDrawerState());
 
 

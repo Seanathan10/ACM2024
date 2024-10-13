@@ -11,6 +11,8 @@ interface HistoricalChartProps {
 }
 
 export const HistoricalChart = ({ stationID, widthPercent = 100, heightPercent = 100 }: HistoricalChartProps) => {
+    console.log('hourlyAverage', hourlyAverage,)
+    console.log('hourlyAverage', stationID)
     const stationData = hourlyAverage[stationID];
 
     // Check if stationData is available

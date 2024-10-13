@@ -21,6 +21,9 @@ import DockIcon from "../assets/sidepanel/dock.svg"; // Adjust the path accordin
 interface SidePanelProps {
   isOpen: boolean;
   station: any;
+  stationIndex: any;
+  status: any;
+  information: any
   closeSideBar: () => void;
 }
 
@@ -29,6 +32,9 @@ const drawerWidth = 440;
 export const SidePanel: React.FC<SidePanelProps> = ({
   isOpen,
   station,
+  stationIndex,
+  status,
+  information,
   closeSideBar,
 }) => {
   const theme = useTheme();
@@ -92,7 +98,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
         <List>
           {[
             {
-              text: "Bikes",
+              text: `Bikes: ${status?.data?.stations[stationIndex]?.num_bikes_available ?? "N/A"}`,
               icon: (
                 <img
                   src={BikeIcon}
@@ -104,7 +110,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
               ),
             },
             {
-              text: "Docks",
+              text: `Docks: ${status?.data?.stations[stationIndex]?.num_docks_available ?? "N/A"}`,
               icon: (
                 <img
                   src={DockIcon}
@@ -128,7 +134,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
         {/* Pass stationID only if station exists */}
         {station && (
           <HistoricalChart
-            stationID={station.stationID}
+            stationID={station.station_id}
             widthPercent={60}
             heightPercent={80}
           />

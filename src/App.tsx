@@ -6,9 +6,11 @@ import { SidePanel } from "./components/SidePanel";
 export default function App() {
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const [selectedStation, setSelectedStation] = useState(null);
+  const [selectedStationIndex, setSelectedStationIndex] = useState(-1)
 
-  const handleDrawerOpen = (station) => {
+  const handleDrawerOpen = (station: any, index: number) => {
     setSelectedStation(station); // Set the selected station
+    setSelectedStationIndex(index)
     setSideBarOpen(true);
   };
 
@@ -55,6 +57,9 @@ export default function App() {
         openSideBar={handleDrawerOpen}
         closeSideBar={handleDrawerClose}
         station={selectedStation} // Pass the selected station to the SidePanel
+        stationIndex={selectedStationIndex}
+        status={statusData}
+        information={informationData}
       />
     </>
   );
