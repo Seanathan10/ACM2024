@@ -10,6 +10,27 @@ interface HistoricalChartProps {
     heightPercent?: number;
 }
 
+const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+        const formattedLabel = label.replace(/([A-Z])/g, ' $1').trim(); // Format label
+        return (
+            <div className="custom-tooltip" style={{
+                backgroundColor: 'white',
+                border: '0px solid #ccc',
+                borderRadius: '5px',
+                padding: '10px',
+                boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.3)',
+            }}>
+                <p style={{ margin: 0, fontWeight: 'bold' }}>{formattedLabel}</p>
+                <p style={{ margin: 0 }}>{`${payload[0].value} Docks`}</p>
+                <p style={{ margin: 0 }}>{`${payload[1].value} Bikes`}</p>
+            </div>
+        );
+    }
+
+    return null;
+};
+
 export const HistoricalChart = ({ stationID, widthPercent = 100, heightPercent = 100 }: HistoricalChartProps) => {
     const stationData = hourlyAverage[stationID];
 
@@ -55,7 +76,7 @@ export const HistoricalChart = ({ stationID, widthPercent = 100, heightPercent =
             <XAxis dataKey="name" angle={-45} textAnchor="end" height={70} />
             <YAxis scale="linear" />
             <CartesianGrid strokeDasharray="3 3" />
-            <Tooltip />
+            <Tooltip content={<CustomTooltip />} />
             <Area type="monotone" dataKey="docksAvailable" stroke="#8884d8" fillOpacity={1} fill="url(#docksAvailable)" />
             <Area type="monotone" dataKey="bikesAvailable" stroke="#82ca9d" fillOpacity={1} fill="url(#bikesAvailable)" />
         </AreaChart>
