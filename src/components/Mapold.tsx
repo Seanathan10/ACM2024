@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import mapboxgl, { Map, Marker } from "mapbox-gl";
+import React, { useEffect, useRef } from "react";
+import mapboxgl, { Map } from "mapbox-gl";
 import { Filter, FilterButtonData } from "./Filter";
-import { SidePanel } from "./SidePanel";
 
 import "../App.css";
 
@@ -16,7 +15,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 //   coordinates: number[];
 // }
 
-const markers = {};
+const markers: { [key: string]: string } = {};
 
 for (let i = 0; i <= 30; i++) {
   try {

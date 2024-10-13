@@ -10,7 +10,9 @@ interface HistoricalChartProps {
     heightPercent?: number;
 }
 
-const CustomTooltip = ({ active, payload, label }) => {
+import { TooltipProps } from 'recharts';
+
+const CustomTooltip = ({ active, payload, label }: TooltipProps<never, never>) => {
     if (active && payload && payload.length) {
         //const formattedLabel = label.replace(/([A-Z])/g, ' $1').trim(); // Format label
         return (

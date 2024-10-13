@@ -20,6 +20,9 @@ export default function App() {
   };
 
   const [statusData, setStatusData] = useState({
+    data: {
+      stations: [],
+    },
     isLoading: true,
     error: null,
   });
@@ -62,7 +65,6 @@ export default function App() {
 
       <SidePanel
         isOpen={sideBarOpen}
-        openSideBar={handleDrawerOpen}
         closeSideBar={handleDrawerClose}
         station={selectedStation} // Pass the selected station to the SidePanel
         stationIndex={selectedStationIndex}

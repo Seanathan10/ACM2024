@@ -1,1 +1,1 @@
-{"root":["./src/App.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/api/BCycle.ts","./src/components/Buttons.tsx","./src/components/Chart.tsx","./src/components/Filter.tsx","./src/components/Map.tsx","./src/components/SidePanel.tsx"],"errors":true,"version":"5.6.3"}
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/api/bcycle.ts","./src/components/buttons.tsx","./src/components/chart.tsx","./src/components/filter.tsx","./src/components/map.tsx","./src/components/mapold.tsx","./src/components/sidepanel.tsx"],"version":"5.6.3"}

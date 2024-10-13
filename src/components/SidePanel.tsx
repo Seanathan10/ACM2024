@@ -18,7 +18,6 @@ import { HistoricalChart } from "./Chart"; // Make sure the path is correct
 
 import BikeIcon from "../assets/sidepanel/bike.svg"; // Adjust the path accordingly
 import DockIcon from "../assets/sidepanel/dock.svg"; // Adjust the path accordingly
-import { alignProperty } from "@mui/material/styles/cssUtils";
 
 interface SidePanelProps {
     isOpen: boolean;
@@ -99,7 +98,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
                         <Typography variant="h6" component="div">
                             {`${station?.name ?? "No Station Selected"}`}
                         </Typography>
-                        <Typography variant="h7" component="div">
+                        <Typography variant="h6" component="div">
                             {`${station?.address ?? "No Address"}`}
                         </Typography>
                     </Box>
@@ -134,7 +133,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
                                 />
                             ),
                         },
-                    ].map((item, index) => (
+                    ].map((item) => (
                         <ListItem key={item.text} disablePadding>
                             <ListItemButton>
                                 <ListItemIcon>{item.icon}</ListItemIcon>
@@ -153,7 +152,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
                         heightPercent={80}
                     />
                 )}
-                <Typography variant="h7" component="div" style={{ textAlign: 'center' }}>
+                <Typography variant="h6" component="div" style={{ textAlign: 'center' }}>
                     <br/>Last API update at {new Date(information.last_updated * 1000).toLocaleTimeString("en-US")}
                 </Typography>
                 <Button onClick={() => {console.log("insert refresh function here")}}>

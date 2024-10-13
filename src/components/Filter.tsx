@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { FilterButton } from "./Buttons";
 import { useEffect } from "react";
-import { Opacity } from "@mui/icons-material";
-import { colors, rgbToHex } from "@mui/material";
 
 export interface FilterButtonData {
     label: string;
@@ -12,10 +10,10 @@ export interface FilterButtonData {
 }
 interface FilterButtonProps {
     filterButtonData: FilterButtonData[];
-    stations: any[];
+    stations: any;
 }
 
-export const Filter = ({ filterButtonData, stations }: FilterButtonProps) => {
+export const Filter = ({ filterButtonData }: FilterButtonProps) => {
     const [filterButtonToggles, setFilterButtonToggles] = useState<Record<string, boolean>>({});
 
     useEffect(() => {
