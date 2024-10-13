@@ -12,7 +12,7 @@ interface HistoricalChartProps {
 
 const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
-        const formattedLabel = label.replace(/([A-Z])/g, ' $1').trim(); // Format label
+        //const formattedLabel = label.replace(/([A-Z])/g, ' $1').trim(); // Format label
         return (
             <div className="custom-tooltip" style={{
                 backgroundColor: 'white',
@@ -21,7 +21,7 @@ const CustomTooltip = ({ active, payload, label }) => {
                 padding: '10px',
                 boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.3)',
             }}>
-                <p style={{ margin: 0, fontWeight: 'bold' }}>{formattedLabel}</p>
+                <p style={{ margin: 0, fontWeight: 'bold' }}>{label}</p>
                 <p style={{ margin: 0 }}>{`${payload[0].value} Docks`}</p>
                 <p style={{ margin: 0 }}>{`${payload[1].value} Bikes`}</p>
             </div>
