@@ -155,7 +155,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
                 <Typography variant="h6" component="div" style={{ textAlign: 'center' }}>
                     <br/>Last API update at {new Date(information.last_updated * 1000).toLocaleTimeString("en-US")}
                 </Typography>
-                <Button onClick={() => {console.log("insert refresh function here")}}>
+                <Button onClick={() => {console.log("insert refresh   function here")}}>
                     Refresh
                 </Button>
             </Drawer>
