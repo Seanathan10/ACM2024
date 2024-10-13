@@ -49,7 +49,7 @@ interface MapProps {
     isLoading: boolean;
     error: string | null;
   };
-//   openSideBar: boolean;
+  openSideBar: (station: any, index: number) => void;
 //   closeSideBar: (open: boolean) => void;
 }
 
