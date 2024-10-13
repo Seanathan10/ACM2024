@@ -59,10 +59,10 @@ const MapComponent: React.FC<MapProps> = ({
   openSideBar,
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const [stations, setStations] = useState();
+  const [stationsToShow, setStationsToShow] = useState();
 
   useEffect(() => {
-    console.log("Updated stations:", JSON.stringify(stations, null, 2));
+    console.log("Updated stations:", JSON.stringify(stationsToShow, null, 2));
     mapboxgl.accessToken =
       "pk.eyJ1Ijoic2VhbmF0aGFuMTAiLCJhIjoiY2x1ZXBndzRzMXZ1ajJrcDY1Y2h5N3ZlNyJ9.yEdc6z0JDvIigDJyc2zfZg";
 
@@ -333,8 +333,9 @@ const MapComponent: React.FC<MapProps> = ({
       />
       <Filter
         filterButtonData={filterButtons}
+        stations={status}
         filterCallback={(filteredStations) =>
-          updateFilteredStations(filteredStations)
+          setStationsToShow(filteredStations)
         }
       ></Filter>
     </>

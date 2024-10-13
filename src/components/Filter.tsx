@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { FilterButton } from "./Buttons";
 import { useEffect } from "react";
+import { Opacity } from "@mui/icons-material";
+import { colors, rgbToHex } from "@mui/material";
 
 export interface FilterButtonData {
     label: string;
@@ -11,7 +13,7 @@ export interface FilterButtonData {
 interface FilterButtonProps {
     filterButtonData: FilterButtonData[];
     stations: any[];
-    filterCallback: (x: object[]) => void;      // Function takes all the stations and returns the filtered object
+    filterCallback: (x: Set<string>) => void;      // Function takes all the stations and returns the filtered object
 }
 
 export const Filter = ({ filterButtonData, filterCallback, stations }: FilterButtonProps) => {
@@ -35,7 +37,7 @@ export const Filter = ({ filterButtonData, filterCallback, stations }: FilterBut
             flexDirection: 'column',
             // justifyItems: 'center',
             // justifyContent: 'center',
-            backgroundColor: 'gray',
+            backgroundColor: 'rgba(31, 31, 31, 0.85)',
             width: '15%',
             minWidth: '200px',
             padding: 10,
@@ -43,7 +45,7 @@ export const Filter = ({ filterButtonData, filterCallback, stations }: FilterBut
             alignItems: 'center',
             // color: 'white',
             // filter: 'blur(1px)',
-            opacity: 0.85,
+            // opacity: 0.85,
             fontWeight: 'bold',
             fontSize: '20px',
             // boxShadow: '0px 0px 5px .1px black',
@@ -67,33 +69,41 @@ export const Filter = ({ filterButtonData, filterCallback, stations }: FilterBut
                     <FilterButton
                         key={buttonData.key}
                         label={buttonData.label}
-                        onClick={() => {
-                            const newToggles = { ...filterButtonToggles };
-                            console.log('newToggles', newToggles);
-                            newToggles[buttonData.key] = !newToggles[buttonData.key];
-                            console.log('newToggles1', newToggles);
+                        style={{
+                            backgroundColor: filterButtonToggles[buttonData.key] ? 'white' : 'black',
+                            color: filterButtonToggles[buttonData.key] ? 'black' : 'white',
+                            opacity: filterButtonToggles[buttonData.key] ? 1 : 0.75,
+                            fontWeight: filterButtonToggles[buttonData.key] ? 'bold' : 'normal',
 
-                            let filteredStations: object[] = [] // For each toggle that is true, filter the stations by all the filter functions in
-                            let temp = stations;
-                            
-                            filterButtonData.forEach((button) => {
-                                if (newToggles[button.key]) {
-                                    // If the button is toggled on, apply the filter
-                                    temp = button.filterFunction(temp); // I am stupid
-                                    
-                                    console.log('stations filterde', temp);
-                                    filteredStations = filteredStations.concat(temp);
-                                }
-                            })
-                            // Return a mapping of unique station ids to boolean values whether they are shown or not 
-                            let stationsToShow: Record<string, boolean> = filteredStations.map((station) => {
-                                station['data']['stations']['station_id'] = true;
-                            }
-                            )
-                            console.log('stationsToShow', stationsToShow);
-
-                            filterCallback(filteredStations);
                         }}
+                        onClick={() => {
+                            setFilterButtonToggles((prevToggles) => {
+                                const newToggles = { ...prevToggles };
+                                console.log('newToggles', newToggles);
+                                newToggles[buttonData.key] = !newToggles[buttonData.key];
+                                console.log('newToggles1', newToggles);
+
+                                let filteredStations: object[] = [] // For each toggle that is true, filter the stations by all the filter functions in
+                                let temp = stations;
+                                
+                                filterButtonData.forEach((button) => {
+                                    if (newToggles[button.key]) {
+                                        // If the button is toggled on, apply the filter
+                                        temp = button.filterFunction(temp); // I am stupid
+                                        
+                                        console.log('stations filterde', temp);
+                                        filteredStations = filteredStations.concat(temp);
+                                    }
+                                })
+                                // Return a list of station ids that should be displayed based on the filters
+
+                                let stationsToDisplay = new Set<string>(filteredStations.map((station) => station['station_id']));  // Set of station ids to display for O(1) lookup
+
+                                console.log('stationsToDisplay', stationsToDisplay);
+
+                                filterCallback(stationsToDisplay);
+                                return newToggles;
+                        })}}
                     />
                 );
             }
