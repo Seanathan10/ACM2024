@@ -12,6 +12,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import { Button } from "@mui/material";
 
 import { HistoricalChart } from "./Chart"; // Make sure the path is correct
 
@@ -107,10 +108,10 @@ export const SidePanel: React.FC<SidePanelProps> = ({
                     </IconButton>
                 </DrawerHeader>
                 <Divider />
-                <List>
+                <List style={{ alignContent: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'row' }}>
                     {[
                         {
-                            text: `Bikes: ${status?.data?.stations[stationIndex]?.num_bikes_available ?? "N/A"}`,
+                            text: `${status?.data?.stations[stationIndex]?.num_bikes_available ?? "-1"} Bikes`,
                             icon: (
                                 <img
                                     src={BikeIcon}
@@ -122,7 +123,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
                             ),
                         },
                         {
-                            text: `Docks: ${status?.data?.stations[stationIndex]?.num_docks_available ?? "N/A"}`,
+                            text: `${status?.data?.stations[stationIndex]?.num_docks_available ?? "-1"} Docks`,
                             icon: (
                                 <img
                                     src={DockIcon}
@@ -144,7 +145,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
                 </List>
                 <Divider />
                 {/* Pass stationID only if station exists */}
-                <Typography style={{ textAlign: 'center' }}><br />Average Bcycle availability over time</Typography>
+                <Typography style={{ textAlign: 'center' }}><br />Average Availability at this Station</Typography>
                 {station && (
                     <HistoricalChart
                         stationID={station.station_id}
@@ -152,10 +153,14 @@ export const SidePanel: React.FC<SidePanelProps> = ({
                         heightPercent={80}
                     />
                 )}
+                <Typography variant="h7" component="div" style={{ textAlign: 'center' }}>
+                    <br/>Last API update at {new Date(information.last_updated * 1000).toLocaleTimeString("en-US")}
+                </Typography>
             </Drawer>
             <Main open={isOpen}>
                 <DrawerHeader />
             </Main>
+
         </Box>
     );
 };
